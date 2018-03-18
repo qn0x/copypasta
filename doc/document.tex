@@ -1,0 +1,68 @@
+\documentclass[11pt]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[ngerman]{babel}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\title{Dokumentation}
+\author{Tanja Noack, Janine Kostka}
+\date{\today}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+\maketitle  
+\pagebreak
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\tableofcontents
+\pagebreak
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Anforderungen}
+	Der Benutzer soll in der App eigene Textschnipsel abspeichern können und diese dann mit Tags versehen, sowie in Ordnern verwalten können. Weiterhin soll der Benutzer nach Tags suchen können (mögliche Erweiterung: Volltextsuche) \\
+	Dabei könnte die App (falls möglich) auch auf die System-Zwischenablage zugreifen, um das Ganze ein wenig zu erleichtern. \\
+	Der Benutzer soll in der App einstellen können, welche Textschnipsel später auf der Tastatur angezeigt werden können. \\
+	
+	Für die Tastatur soll eine eigene sogenannte Input Method mittels der bereitgestellten API (https://developer.android.com/guide/topics/text/creating-input-method.html) geschrieben werden. Statt den einzelnen Tasten sollen dann Inhalte aus der App angezeigt werden, die vom Nutzer selbst festgelegt werden können.\\
+
+	Das Projekt besteht also aus zwei Komponenten:
+	\begin{enumerate}
+		\item eine App, um die Textschnipsel zu organisieren und die Tastatur zu konfigurieren
+		\item eine Tastatur, die ihren Inhalt je nach Einstellung des Benutzers verändert
+	\end{enumerate}
+
+	\subsection{Funktionale Anforderungen}
+		\subsubsection{App}
+		\begin{itemize}
+			\item Der Benutzer soll eigene Textschnipsel abspeichern, löschen und verändern können
+			\item Die Textschnipsel bestehen jeweils aus Text, Name des Schnipsels und einer Liste von Tags
+			\item Der Benutzer kann die Textschnipsel in Ordnern organisieren
+			\item Der Benutzer kann nach Textschnipseln entweder mittels Volltextsuche, über Tags oder über deren Namen suchen
+		\end{itemize}
+	
+		\subsection{Tastatur}
+		\begin{itemize}
+			\item write stuff here
+		\end{itemize}
+	
+	\subsection{Nichtfunktionale Anforderungen}
+	\subsection{Anwendungsfälle}
+
+
+\section{Implementierung}
+% Kurzer Überblick über den Ablauf der Implementierung
+	\subsection{Workflow der Dialoge}
+		\subsubsection{App}
+		\subsubsection{Tastatur}
+
+	\subsection{Probleme und deren Lösung}
+
+\section{Wer hat was gemacht?}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\end{document}
+              
