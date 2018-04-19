@@ -55,6 +55,8 @@
 
 \section{Implementierung}
 % Kurzer Überblick über den Ablauf der Implementierung
+	\subsection{Architektur}
+		Welche Frameworks wurden benutzt? Welche Zusammenhänge sind zwischen den Modulen etc.?
 	\subsection{Workflow der Dialoge}
 		\subsubsection{App}
 		\subsubsection{Tastatur}
@@ -62,6 +64,30 @@
 	\subsection{Probleme und deren Lösung}
 
 \section{Wer hat was gemacht?}
+\section{Notizen}
+	\emph{Absprache mit Herrn Schemmert}
+	
+	Dokumentation:
+	\begin{itemize}
+		\item Architektur mit einfügen (welche PlugIns, Frameworks, APIs, ... benutzt werden)
+		\item Klassendiagramm nur wenn sinnvoll
+		\item Use Cases wichtig
+		\item Abspeichern der Schnipsel: Datenbank (SQL lite [relational])? Ein großer JSON-Block? Ein JSON pro Schnipsel?
+	\end{itemize}	
+	Aufbau/Entwurf:
+	\begin{itemize}
+		\item entweder Ordnerstruktur (doof) oder Suche? 
+		\item eventuell: Gliederung nach Tags/Themen (dienstlich, privat, ...)/Art (Text, Smiley, ...)/Klassifizierungen/...
+		\item App zuerst bauen, weil einfach
+	\end{itemize}
+	Tastatur:
+	\begin{itemize}
+		\item Anzeige der Liste an Schnipseln: 
+		\item Autovervollständigung: Ab eintippen, Liste aktualisiert mit allen Einträgen, die mit Ab beginnen
+		\item Häufigkeitsanalyse: wird viel benutzt -> wird als erstes angezeigt (nur mit DB)
+		\item Swift-Tastatur: extra Menüpunkt für Liste?
+	\end{itemize}
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \end{document}
