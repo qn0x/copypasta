@@ -12,7 +12,9 @@ import android.widget.EditText;
 
 public class NewSnippetActivity extends AppCompatActivity {
 
-    public static final String EXTRA_REPLY = "com.example.android.wordlistsql.REPLY";
+    public static final String NAME = "NAME";
+    public static final String TAGS = "TAGS";
+    public static final String TEXT = "TEXT";
 
     private EditText snippetNameView;
     private EditText snippetTextView;
@@ -42,9 +44,9 @@ public class NewSnippetActivity extends AppCompatActivity {
                     String name = snippetNameView.getText().toString();
                     String text = snippetTextView.getText().toString();
                     String tags = snippetTagsView.getText().toString();
-                    replyIntent.putExtra(EXTRA_REPLY, name);
-                    replyIntent.putExtra(EXTRA_REPLY, text);
-                    replyIntent.putExtra(EXTRA_REPLY, tags);
+                    replyIntent.putExtra(NAME, name);
+                    replyIntent.putExtra(TEXT, text);
+                    replyIntent.putExtra(TAGS, tags);
 
                     setResult(RESULT_OK, replyIntent);
                 }

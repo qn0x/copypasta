@@ -18,7 +18,7 @@ public class SnippetViewModel extends AndroidViewModel {
         allSnippets = snippetRepository.getAllSnippets();
     }
 
-    LiveData<List<Snippet>> getAllSnippets() {
+    public LiveData<List<Snippet>> getAllSnippets() {
         return allSnippets;
     }
 

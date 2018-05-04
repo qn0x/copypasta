@@ -1,5 +1,6 @@
 package xyz.qn0x.copypasta;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,12 +16,15 @@ import xyz.qn0x.copypasta.persistence.entities.Snippet;
  */
 
 public class SnippetAdapter extends RecyclerView.Adapter<SnippetAdapter.SnippetViewHolder> {
+
+    private final LayoutInflater mInflater;
+
     private List<Snippet> snippetList;
 
     public class SnippetViewHolder extends RecyclerView.ViewHolder {
         public TextView name, text, tags;
 
-        public SnippetViewHolder(View view) {
+        SnippetViewHolder(View view) {
             super(view);
             name = view.findViewById(R.id.name);
             text = view.findViewById(R.id.text);
@@ -28,14 +32,13 @@ public class SnippetAdapter extends RecyclerView.Adapter<SnippetAdapter.SnippetV
         }
     }
 
-    public SnippetAdapter(List<Snippet> snippetList) {
-        this.snippetList = snippetList;
+    public SnippetAdapter(Context context) {
+        mInflater = LayoutInflater.from(context);
     }
 
     @Override
     public SnippetViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.snippet_list_row, parent, false);
+        View itemView = mInflater.inflate(R.layout.snippet_list_row, parent, false);
         return new SnippetViewHolder(itemView);
     }
 
@@ -47,7 +50,7 @@ public class SnippetAdapter extends RecyclerView.Adapter<SnippetAdapter.SnippetV
         holder.tags.setText(snippet.getTags());
     }
 
-    void setSnippets(List<Snippet> words){
+    public void setSnippets(List<Snippet> words){
         snippetList = words;
         notifyDataSetChanged();
     }
