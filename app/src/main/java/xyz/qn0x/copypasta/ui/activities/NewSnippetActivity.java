@@ -1,4 +1,4 @@
-package xyz.qn0x.copypasta;
+package xyz.qn0x.copypasta.ui.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,6 +9,8 @@ import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
+
+import xyz.qn0x.copypasta.R;
 
 public class NewSnippetActivity extends AppCompatActivity {
 

@@ -1,4 +1,4 @@
-package xyz.qn0x.copypasta;
+package xyz.qn0x.copypasta.persistence;
 
 import android.app.Application;
 import android.arch.lifecycle.LiveData;
@@ -14,13 +14,13 @@ public class SnippetRepository {
     private SnippetDao snippetDao;
     private LiveData<List<Snippet>> allSnippets;
 
-    SnippetRepository(Application application) {
+    public SnippetRepository(Application application) {
         SnippetDatabase db = SnippetDatabase.getDatabase(application);
         snippetDao = db.snippetDao();
         allSnippets = snippetDao.getAllSnippets();
     }
 
-    LiveData<List<Snippet>> getAllSnippets() {
+    public LiveData<List<Snippet>> getAllSnippets() {
         return allSnippets;
     }
 

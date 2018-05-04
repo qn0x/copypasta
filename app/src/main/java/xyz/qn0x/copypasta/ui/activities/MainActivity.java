@@ -1,4 +1,4 @@
-package xyz.qn0x.copypasta.ui;
+package xyz.qn0x.copypasta.ui.activities;
 
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
@@ -15,21 +15,18 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Toast;
 
-import java.util.LinkedList;
 import java.util.List;
-import java.util.UUID;
 
-import xyz.qn0x.copypasta.NewSnippetActivity;
 import xyz.qn0x.copypasta.R;
-import xyz.qn0x.copypasta.RecyclerTouchListener;
-import xyz.qn0x.copypasta.SnippetAdapter;
+import xyz.qn0x.copypasta.ui.utility.RecyclerTouchListener;
+import xyz.qn0x.copypasta.ui.utility.SnippetAdapter;
 import xyz.qn0x.copypasta.SnippetViewModel;
 import xyz.qn0x.copypasta.persistence.entities.Snippet;
 
 
 public class MainActivity extends AppCompatActivity {
 
-    public static final int NEW_WORD_ACTIVITY_REQUEST_CODE = 1;
+    public static final int NEW_SNIPPET_ACTIVITY_REQUEST_CODE = 1;
 
     private SnippetViewModel snippetViewModel;
 
@@ -38,26 +35,27 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // set up recycler view
         RecyclerView recyclerView = findViewById(R.id.snippetList);
         recyclerView.setHasFixedSize(true);
         recyclerView.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
         recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
-
         final SnippetAdapter adapter = new SnippetAdapter(this);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-
+        // set up floating action button
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this, NewSnippetActivity.class);
-                startActivityForResult(intent, NEW_WORD_ACTIVITY_REQUEST_CODE);
+                startActivityForResult(intent, NEW_SNIPPET_ACTIVITY_REQUEST_CODE);
             }
         });
 
+        // ensure the recycler view stays updated with the current db state
         snippetViewModel = ViewModelProviders.of(this).get(SnippetViewModel.class);
         snippetViewModel.getAllSnippets().observe(this, new Observer<List<Snippet>>() {
             @Override
@@ -66,6 +64,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        // react to touches on the recycler view list
         recyclerView.addOnItemTouchListener(new RecyclerTouchListener(getApplicationContext(), recyclerView,
                 new RecyclerTouchListener.ClickListener() {
                     @Override
@@ -88,12 +87,13 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-
+    // digest any activity results
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == NEW_WORD_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK) {
+        // a new snippet was successfully inserted
+        if (requestCode == NEW_SNIPPET_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK) {
             String name = data.getStringExtra(NewSnippetActivity.NAME);
             String text = data.getStringExtra(NewSnippetActivity.TEXT);
             String tags = data.getStringExtra(NewSnippetActivity.TAGS);
@@ -103,17 +103,5 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), R.string.empty_not_saved, Toast.LENGTH_LONG)
                     .show();
         }
-    }
-
-    // temporary data generation
-    private List<Snippet> addData() {
-        List<Snippet> list = new LinkedList<>();
-        for (int i = 0; i < 3; i++) {
-            String name = UUID.randomUUID().toString();
-            String text = UUID.randomUUID().toString();
-
-            list.add(new Snippet(name, text, "Tag"));
-        }
-        return list;
     }
 }

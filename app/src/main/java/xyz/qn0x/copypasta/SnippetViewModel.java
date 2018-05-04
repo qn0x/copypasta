@@ -6,6 +6,7 @@ import android.arch.lifecycle.LiveData;
 
 import java.util.List;
 
+import xyz.qn0x.copypasta.persistence.SnippetRepository;
 import xyz.qn0x.copypasta.persistence.entities.Snippet;
 
 public class SnippetViewModel extends AndroidViewModel {

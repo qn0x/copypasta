@@ -1,4 +1,4 @@
-package xyz.qn0x.copypasta;
+package xyz.qn0x.copypasta.ui.utility;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import xyz.qn0x.copypasta.R;
 import xyz.qn0x.copypasta.persistence.entities.Snippet;
 
 /**
