@@ -13,6 +13,7 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
@@ -106,6 +107,21 @@ public class MainActivity extends AppCompatActivity {
         } else {
             Toast.makeText(getApplicationContext(), R.string.empty_not_saved, Toast.LENGTH_LONG)
                     .show();
+        }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.app_bar_search:
+                Snackbar.make(this.getCurrentFocus(), "", Snackbar.LENGTH_SHORT);
+                return true;
+
+            case R.id.action_settings:
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
         }
     }
 }

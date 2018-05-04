@@ -1,11 +1,15 @@
 <resources>
     <string name="app_name">Copypasta</string>
-    <string name="action_settings">Settings</string>
 
+    <!-- AppBar -->
+    <string name="action_settings">Dummy</string>
+
+    <!-- Activity: NewSnippet -->
     <string name="hint_word">Snippet</string>
     <string name="button_save">Save</string>
     <string name="empty_not_saved">Snippet not saved because it is empty.</string>
 
+    <!-- Activity titles -->
     <string name="title_activity_main">Your Snippets</string>
     <string name="title_activity_new_snippet">Add a new Snippet</string>
 </resources>
