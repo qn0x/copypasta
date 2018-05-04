@@ -26,7 +26,7 @@ public class NewSnippetActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_snippet);
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.new_snippet_toolbar);
         setSupportActionBar(toolbar);
 
         snippetNameView = findViewById(R.id.snippetName);

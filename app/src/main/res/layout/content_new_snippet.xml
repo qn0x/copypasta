@@ -4,6 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:isScrollContainer="true"
+    android:scrollIndicators="right"
+    android:scrollbarAlwaysDrawVerticalTrack="true"
+    android:scrollbars="vertical"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".ui.activities.NewSnippetActivity"
     tools:showIn="@layout/activity_new_snippet">
@@ -16,26 +20,13 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:ems="10"
-        android:inputType="textPersonName"
-        android:text="Name"
+        android:hint="Name"
+        android:inputType="text|textCapSentences"
+        android:singleLine="true"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
-    <EditText
-        android:id="@+id/snippetText"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:ems="10"
-        android:inputType="textMultiLine"
-        android:text="Snippet"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.503"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tags" />
 
     <EditText
         android:id="@+id/tags"
@@ -45,10 +36,57 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:ems="10"
+        android:hint="Tags (csv, for now)"
         android:inputType="textPersonName"
-        android:text="Tags (csv)"
+        android:selectAllOnFocus="false"
+        android:singleLine="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.503"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/snippetName" />
+
+    <ScrollView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="72dp"
+        android:fillViewport="false"
+        android:paddingBottom="0dp"
+        android:paddingEnd="8dp"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+        android:paddingStart="8dp"
+        android:paddingTop="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tags"
+        app:layout_constraintVertical_bias="0.0">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="top"
+            android:orientation="vertical">
+
+            <EditText
+                android:id="@+id/snippetText"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:ems="10"
+                android:hint="Snippet"
+                android:inputType="textMultiLine"
+                android:scrollIndicators="right"
+                android:scrollbarAlwaysDrawHorizontalTrack="false"
+                android:scrollbarAlwaysDrawVerticalTrack="true"
+                android:scrollbars="horizontal"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.503"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tags"
+                app:layout_constraintVertical_bias="0.0" />
+
+        </LinearLayout>
+    </ScrollView>
+
 </android.support.constraint.ConstraintLayout>

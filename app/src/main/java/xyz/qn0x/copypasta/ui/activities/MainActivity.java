@@ -12,6 +12,7 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Toast;
 
@@ -34,6 +35,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Toolbar toolbar = findViewById(R.id.main_toolbar);
+        setSupportActionBar(toolbar);
 
         // set up recycler view
         RecyclerView recyclerView = findViewById(R.id.snippetList);
@@ -55,8 +58,9 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        // ensure the recycler view stays updated with the current db state
+        // instantiate ViewModel
         snippetViewModel = ViewModelProviders.of(this).get(SnippetViewModel.class);
+        // ensure the recycler view stays updated with the current db state
         snippetViewModel.getAllSnippets().observe(this, new Observer<List<Snippet>>() {
             @Override
             public void onChanged(@Nullable List<Snippet> snippets) {
