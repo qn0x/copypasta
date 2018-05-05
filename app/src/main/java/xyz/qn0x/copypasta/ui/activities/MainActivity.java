@@ -13,6 +13,8 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
@@ -38,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.main_toolbar);
         setSupportActionBar(toolbar);
+        toolbar.getVisibility();
 
         // set up recycler view
         RecyclerView recyclerView = findViewById(R.id.snippetList);
@@ -92,6 +95,14 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    // draw app bar options
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
     // digest any activity results
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -110,14 +121,16 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.app_bar_search:
-                Snackbar.make(this.getCurrentFocus(), "", Snackbar.LENGTH_SHORT);
+                Toast.makeText(getApplicationContext(), "search clicked", Toast.LENGTH_SHORT).show();
                 return true;
 
             case R.id.action_settings:
+                Toast.makeText(getApplicationContext(), "settings clicked", Toast.LENGTH_SHORT).show();
                 return true;
 
             default:

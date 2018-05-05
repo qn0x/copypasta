@@ -24,7 +24,7 @@
             android:label="@string/title_activity_new_snippet"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustPan"
-            android:isScrollContainer="true"></activity>
+            android:isScrollContainer="true" />
     </application>
 
 </manifest>
