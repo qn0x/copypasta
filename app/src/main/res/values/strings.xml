@@ -12,4 +12,5 @@
     <!-- Activity titles -->
     <string name="title_activity_main">Your Snippets</string>
     <string name="title_activity_new_snippet">Add a new Snippet</string>
+    <string name="title_activity_view_snippet">Your Snippet</string>
 </resources>

@@ -15,16 +15,21 @@
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
             android:name=".ui.activities.NewSnippetActivity"
-            android:parentActivityName=".ui.activities.MainActivity"
+            android:isScrollContainer="true"
             android:label="@string/title_activity_new_snippet"
+            android:parentActivityName=".ui.activities.MainActivity"
             android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="adjustPan"
-            android:isScrollContainer="true" />
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".ui.activities.ViewSnippetActivity"
+            android:label="@string/title_activity_view_snippet"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>
