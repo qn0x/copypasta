@@ -16,12 +16,10 @@ public interface SnippetDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insert(Snippet snippet);
 
-    @Query("DELETE FROM snippets")
-    void deleteAll();
-
     @Query("SELECT * FROM snippets ORDER BY name ASC")
     LiveData<List<Snippet>> getAllSnippets();
 
-    @Query("SELECT * FROM snippets WHERE name = :name")
-    LiveData<Snippet> getSnippetByName(String name);
+    @Query("SELECT * FROM snippets WHERE snippets.id IN " +
+            "(SELECT snippet_id FROM snippetTags WHERE tag_id = :tagId)")
+    LiveData<List<Snippet>> getSnippetsByTag(String tagId);
 }

@@ -6,17 +6,22 @@ import android.os.AsyncTask;
 
 import java.util.List;
 
-import xyz.qn0x.copypasta.persistence.SnippetDatabase;
 import xyz.qn0x.copypasta.persistence.dao.SnippetDao;
+import xyz.qn0x.copypasta.persistence.dao.TagDao;
 import xyz.qn0x.copypasta.persistence.entities.Snippet;
+import xyz.qn0x.copypasta.persistence.entities.Tag;
 
 public class SnippetRepository {
     private SnippetDao snippetDao;
+    private TagDao tagDao;
     private LiveData<List<Snippet>> allSnippets;
+    private LiveData<List<Tag>> allTags;
 
     public SnippetRepository(Application application) {
         SnippetDatabase db = SnippetDatabase.getDatabase(application);
         snippetDao = db.snippetDao();
+        tagDao = db.tagDao();
+        allTags = tagDao.getAllTags();
         allSnippets = snippetDao.getAllSnippets();
     }
 
@@ -43,5 +48,9 @@ public class SnippetRepository {
             return null;
         }
 
+    }
+
+    public LiveData<List<Tag>> getAllTags() {
+        return allTags;
     }
 }

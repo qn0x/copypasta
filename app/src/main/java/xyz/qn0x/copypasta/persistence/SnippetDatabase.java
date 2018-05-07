@@ -8,9 +8,15 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 
 import xyz.qn0x.copypasta.persistence.dao.SnippetDao;
+import xyz.qn0x.copypasta.persistence.dao.TagDao;
 import xyz.qn0x.copypasta.persistence.entities.Snippet;
+import xyz.qn0x.copypasta.persistence.entities.SnippetTags;
+import xyz.qn0x.copypasta.persistence.entities.Tag;
 
-@Database(entities = {Snippet.class}, version = 1, exportSchema = false)
+@Database(entities = {
+        Snippet.class, Tag.class, SnippetTags.class},
+        version = 1,
+        exportSchema = false)
 public abstract class SnippetDatabase extends RoomDatabase {
 
     private static SnippetDatabase INSTANCE = null;
@@ -20,7 +26,7 @@ public abstract class SnippetDatabase extends RoomDatabase {
             synchronized (SnippetDatabase.class) {
                 if (INSTANCE == null) {
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
-                            SnippetDatabase.class, "word_database")
+                            SnippetDatabase.class, "snippet_database")
                             .addCallback(snippetDatabaseCallback)
                             .build();
                 }
@@ -32,11 +38,14 @@ public abstract class SnippetDatabase extends RoomDatabase {
 
     public abstract SnippetDao snippetDao();
 
-    private static SnippetDatabase.Callback snippetDatabaseCallback = new SnippetDatabase.Callback() {
-        @Override
-        public void onOpen(@NonNull SupportSQLiteDatabase db) {
-            super.onOpen(db);
+    public abstract TagDao tagDao();
 
-        }
-    };
+    private static SnippetDatabase.Callback snippetDatabaseCallback =
+            new SnippetDatabase.Callback() {
+                @Override
+                public void onOpen(@NonNull SupportSQLiteDatabase db) {
+                    super.onOpen(db);
+
+                }
+            };
 }

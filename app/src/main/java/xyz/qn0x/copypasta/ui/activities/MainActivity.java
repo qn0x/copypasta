@@ -86,7 +86,7 @@ public class MainActivity extends AppCompatActivity {
                                     Toast.LENGTH_SHORT).show();
                             Intent intent = new Intent(MainActivity.this, ViewSnippetActivity.class);
                             intent.putExtra("ID", snippet.getName());
-                            intent.putExtra("TAGS", snippet.getTags());
+                            //intent.putExtra("TAGS", snippet.getTags());
                             intent.putExtra("TEXT", snippet.getText());
                             startActivity(intent);
                         }
@@ -118,7 +118,7 @@ public class MainActivity extends AppCompatActivity {
             String name = data.getStringExtra(NewSnippetActivity.NAME);
             String text = data.getStringExtra(NewSnippetActivity.TEXT);
             String tags = data.getStringExtra(NewSnippetActivity.TAGS);
-            Snippet snippet = new Snippet(name, text, tags);
+            Snippet snippet = new Snippet(name, text);
             snippetViewModel.insert(snippet);
         } else {
             Toast.makeText(getApplicationContext(), R.string.empty_not_saved, Toast.LENGTH_LONG)

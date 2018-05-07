@@ -48,7 +48,7 @@ public class SnippetAdapter extends RecyclerView.Adapter<SnippetAdapter.SnippetV
         Snippet snippet = snippetList.get(position);
         holder.name.setText(snippet.getName());
         holder.text.setText(snippet.getText());
-        holder.tags.setText(snippet.getTags());
+        //holder.tags.setText(snippet.getTags());
     }
 
     public void setSnippets(List<Snippet> words){

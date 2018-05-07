@@ -1,22 +1,17 @@
 package xyz.qn0x.copypasta.ui.activities;
 
-import android.arch.lifecycle.LiveData;
-import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.widget.TextView;
-
-import java.util.List;
+import android.widget.Toast;
 
 import xyz.qn0x.copypasta.R;
-import xyz.qn0x.copypasta.SnippetViewModel;
-import xyz.qn0x.copypasta.persistence.entities.Snippet;
 
 public class ViewSnippetActivity extends AppCompatActivity {
 
@@ -43,4 +38,23 @@ public class ViewSnippetActivity extends AppCompatActivity {
         vText.setText(intent.getStringExtra("TEXT"));
     }
 
+    // draw app bar options
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_view_snippet, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.edit:
+                Toast.makeText(getApplicationContext(), "edit clicked", Toast.LENGTH_SHORT).show();
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
 }
