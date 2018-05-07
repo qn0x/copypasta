@@ -86,6 +86,8 @@ public class MainActivity extends AppCompatActivity {
                                     Toast.LENGTH_SHORT).show();
                             Intent intent = new Intent(MainActivity.this, ViewSnippetActivity.class);
                             intent.putExtra("ID", snippet.getName());
+                            intent.putExtra("TAGS", snippet.getTags());
+                            intent.putExtra("TEXT", snippet.getText());
                             startActivity(intent);
                         }
                     }

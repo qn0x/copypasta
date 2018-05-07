@@ -21,4 +21,7 @@ public interface SnippetDao {
 
     @Query("SELECT * FROM snippets ORDER BY name ASC")
     LiveData<List<Snippet>> getAllSnippets();
+
+    @Query("SELECT * FROM snippets WHERE name = :name")
+    LiveData<Snippet> getSnippetByName(String name);
 }

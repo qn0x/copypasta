@@ -24,7 +24,7 @@ public class SnippetRepository {
         return allSnippets;
     }
 
-    public void insert (Snippet snippet) {
+    public void insert(Snippet snippet) {
         new insertAsyncTask(snippetDao).execute(snippet);
     }
 
@@ -42,5 +42,6 @@ public class SnippetRepository {
             mAsyncTaskDao.insert(params[0]);
             return null;
         }
+
     }
 }

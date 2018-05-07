@@ -29,7 +29,8 @@
         <activity
             android:name=".ui.activities.ViewSnippetActivity"
             android:label="@string/title_activity_view_snippet"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar"
+            android:parentActivityName=".ui.activities.MainActivity" />
     </application>
 
 </manifest>
