@@ -19,6 +19,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import java.util.Arrays;
 import java.util.List;
 
 import xyz.qn0x.copypasta.R;
@@ -33,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
     public static final int NEW_SNIPPET_ACTIVITY_REQUEST_CODE = 1;
 
     private SnippetViewModel snippetViewModel;
+    public static List<String> TAGS_LIST;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -115,11 +117,20 @@ public class MainActivity extends AppCompatActivity {
 
         // a new snippet was successfully inserted
         if (requestCode == NEW_SNIPPET_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK) {
+            // insert snippet into db
             String name = data.getStringExtra(NewSnippetActivity.NAME);
             String text = data.getStringExtra(NewSnippetActivity.TEXT);
-            String tags = data.getStringExtra(NewSnippetActivity.TAGS);
             Snippet snippet = new Snippet(name, text);
-            snippetViewModel.insert(snippet);
+
+            // parse tags and store them in the db
+            String tags = data.getStringExtra(NewSnippetActivity.TAGS);
+            TAGS_LIST = Arrays.asList(tags.split(","));
+            for (String tag : TAGS_LIST) {
+                tag = tag.trim();
+            }
+
+            long snippetId = snippetViewModel.insert(snippet);
+
         } else {
             Toast.makeText(getApplicationContext(), R.string.empty_not_saved, Toast.LENGTH_LONG)
                     .show();
@@ -141,5 +152,9 @@ public class MainActivity extends AppCompatActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    public static void saveTagsForSnippetId(List<String> tags, long snippetId) {
+
     }
 }

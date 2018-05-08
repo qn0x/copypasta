@@ -76,10 +76,12 @@ public class NewSnippetActivity extends AppCompatActivity {
             setResult(RESULT_CANCELED, replyIntent);
         } else {
             String name = snippetNameView.getText().toString();
-            String text = snippetTextView.getText().toString();
-            String tags = snippetTagsView.getText().toString();
             replyIntent.putExtra(NAME, name);
+
+            String text = snippetTextView.getText().toString();
             replyIntent.putExtra(TEXT, text);
+
+            String tags = snippetTagsView.getText().toString();
             replyIntent.putExtra(TAGS, tags);
 
             setResult(RESULT_OK, replyIntent);

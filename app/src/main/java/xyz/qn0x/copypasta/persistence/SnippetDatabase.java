@@ -8,6 +8,7 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 
 import xyz.qn0x.copypasta.persistence.dao.SnippetDao;
+import xyz.qn0x.copypasta.persistence.dao.SnippetTagsDao;
 import xyz.qn0x.copypasta.persistence.dao.TagDao;
 import xyz.qn0x.copypasta.persistence.entities.Snippet;
 import xyz.qn0x.copypasta.persistence.entities.SnippetTags;
@@ -39,6 +40,8 @@ public abstract class SnippetDatabase extends RoomDatabase {
     public abstract SnippetDao snippetDao();
 
     public abstract TagDao tagDao();
+
+    public abstract SnippetTagsDao snippetTagsDao();
 
     private static SnippetDatabase.Callback snippetDatabaseCallback =
             new SnippetDatabase.Callback() {

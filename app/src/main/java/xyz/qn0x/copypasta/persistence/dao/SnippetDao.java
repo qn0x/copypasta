@@ -14,7 +14,7 @@ import xyz.qn0x.copypasta.persistence.entities.Snippet;
 public interface SnippetDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insert(Snippet snippet);
+    long insert(Snippet snippet);
 
     @Query("SELECT * FROM snippets ORDER BY name ASC")
     LiveData<List<Snippet>> getAllSnippets();
