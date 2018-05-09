@@ -2,15 +2,20 @@ package xyz.qn0x.copypasta.persistence.entities;
 
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Ignore;
+import android.arch.persistence.room.Index;
 import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.NonNull;
 
+import java.util.List;
 
-@Entity(tableName = "snippets")
+
+@Entity(tableName = "snippets",
+        indices = {@Index(value = {"name", "text"}, unique = true)})
 public class Snippet {
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id")
-    private int id;
+    private long id;
 
     @ColumnInfo(name = "name")
     private String name = "";
@@ -18,12 +23,15 @@ public class Snippet {
     @ColumnInfo(name = "text")
     private String text = "";
 
+    @Ignore
+    private List<Tag> tags;
+
     public Snippet(@NonNull String name, String text) {
         this.name = name;
         this.text = text;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
@@ -35,8 +43,16 @@ public class Snippet {
         return text;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
+    }
+
+    public List<Tag> getTags() {
+        return tags;
+    }
+
+    public void setTags(List<Tag> tags) {
+        this.tags = tags;
     }
 
     public void setName(String name) {

@@ -2,16 +2,19 @@ package xyz.qn0x.copypasta.persistence.entities;
 
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Index;
 import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.NonNull;
 
-@Entity(tableName = "tags")
+@Entity(tableName = "tags",
+        indices = {@Index(value = {"tag"}, unique = true)})
 public class Tag {
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id")
-    private int id;
+    private long id;
 
     @ColumnInfo(name = "tag")
+
     @NonNull
     private String tag;
 
@@ -19,7 +22,7 @@ public class Tag {
         this.tag = tag;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
@@ -28,7 +31,7 @@ public class Tag {
         return tag;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 

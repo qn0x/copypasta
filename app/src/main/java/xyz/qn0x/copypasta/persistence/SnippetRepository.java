@@ -4,6 +4,7 @@ import android.app.Application;
 import android.arch.lifecycle.LiveData;
 import android.os.AsyncTask;
 
+import java.util.LinkedList;
 import java.util.List;
 
 import xyz.qn0x.copypasta.persistence.dao.SnippetDao;
@@ -33,49 +34,92 @@ public class SnippetRepository {
     }
 
     public long insert(Snippet snippet) {
-        new insertAsyncTask(snippetDao).execute(snippet);
+        // TODO
+        new insertSnippetTask(snippetDao, tagDao, snippetTagsDao).execute(snippet);
         return snippet.getId();
     }
 
     // make sure data is inserted outside of UI thread
-    private static class insertAsyncTask extends AsyncTask<Snippet, Void, Long> {
+    private static class insertSnippetTask extends AsyncTask<Snippet, Void, Long> {
 
-        private SnippetDao mAsyncTaskDao;
+        private SnippetDao snippetDao;
+        private TagDao tagDao;
+        private SnippetTagsDao snippetTagsDao;
+        private Snippet snippet;
 
-        insertAsyncTask(SnippetDao dao) {
-            mAsyncTaskDao = dao;
+        insertSnippetTask(SnippetDao sDao, TagDao tDao, SnippetTagsDao stDao) {
+            snippetDao = sDao;
+            tagDao = tDao;
+            snippetTagsDao = stDao;
         }
 
         @Override
         protected Long doInBackground(final Snippet... params) {
-            return mAsyncTaskDao.insert(params[0]);
+            snippet = params[0];
+            return snippetDao.insert(params[0]);
         }
 
         @Override
-        protected void onPostExecute(Long aLong) {
-            // TODO
-            MainActivity.saveTagsForSnippetId(MainActivity.TAGS_LIST, aLong);
-            System.out.println("ID is " + aLong);
+        protected void onPostExecute(Long snippetId) {
+            snippet.setId(snippetId);
+            new insertTagsTask(tagDao, snippetTagsDao, snippet).execute(snippet.getTags()
+                    .toArray(new Tag[snippet.getTags().size()]));
         }
     }
 
-    public List<Long> insert(Tag... tags) {
-        return new insertTagsAsyncTask(tagDao).execute(tags);
+    public void insert(Tag... tags) {
+        new insertTagsTask(tagDao).execute(tags);
     }
 
-    private static class insertTagsAsyncTask extends AsyncTask<Tag[], Void, List<Long>> {
+    private static class insertTagsTask extends AsyncTask<Tag, Void, List<Long>> {
 
         private TagDao mAsyncTaskDao;
+        private Snippet snippet;
+        private SnippetTagsDao snippetTagsDao;
 
-        public insertTagsAsyncTask(TagDao dao) {
+        insertTagsTask(TagDao dao) {
             mAsyncTaskDao = dao;
         }
 
+        insertTagsTask(TagDao dao, SnippetTagsDao snippetTagsDao, Snippet snippet) {
+            mAsyncTaskDao = dao;
+            this.snippet = snippet;
+            this.snippetTagsDao = snippetTagsDao;
+        }
+
         @Override
-        protected List<Long> doInBackground(Tag[]... tags) {
+        protected List<Long> doInBackground(Tag... tags) {
+            return mAsyncTaskDao.insert(tags);
+        }
+
+        @Override
+        protected void onPostExecute(List<Long> tagIds) {
+            tagIds.forEach(System.out::println);
+            List<SnippetTags> snippetTags = new LinkedList<>();
+            tagIds.forEach(id -> snippetTags.add(new SnippetTags(snippet.getId(), id)));
+            System.out.println(snippet.getId());
+            new insertSnippetTagsTask(snippetTagsDao).execute(snippetTags.toArray(new SnippetTags[snippetTags.size()]));
+        }
+    }
+
+    private static class insertSnippetTagsTask extends AsyncTask<SnippetTags, Void, Void> {
+
+        private SnippetTagsDao snippetTagsDao;
+
+        insertSnippetTagsTask(SnippetTagsDao snippetTagsDao) {
+            this.snippetTagsDao = snippetTagsDao;
+        }
+
+        @Override
+        protected Void doInBackground(SnippetTags... snippetTags) {
+            snippetTagsDao.insert(snippetTags);
             return null;
         }
     }
+
+    // -----------------------------------------------------------------------------------------
+    // repository contents
+    // -----------------------------------------------------------------------------------------
 
     public LiveData<List<SnippetTags>> getAllSnippetTags() {
         return allSnippetTags;

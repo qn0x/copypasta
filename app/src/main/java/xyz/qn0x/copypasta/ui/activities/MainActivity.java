@@ -19,10 +19,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 
 import xyz.qn0x.copypasta.R;
+import xyz.qn0x.copypasta.persistence.entities.Tag;
 import xyz.qn0x.copypasta.ui.utility.RecyclerTouchListener;
 import xyz.qn0x.copypasta.ui.utility.SnippetAdapter;
 import xyz.qn0x.copypasta.SnippetViewModel;
@@ -34,7 +37,10 @@ public class MainActivity extends AppCompatActivity {
     public static final int NEW_SNIPPET_ACTIVITY_REQUEST_CODE = 1;
 
     private SnippetViewModel snippetViewModel;
-    public static List<String> TAGS_LIST;
+    public static long SNIPPET_ID = -1;
+    public static List<Long> TAG_IDS = new ArrayList<>();
+    public static boolean SNIPPET_DONE = false;
+    public static boolean TAGS_DONE = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,23 +62,15 @@ public class MainActivity extends AppCompatActivity {
 
         // set up floating action button
         FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, NewSnippetActivity.class);
-                startActivityForResult(intent, NEW_SNIPPET_ACTIVITY_REQUEST_CODE);
-            }
+        fab.setOnClickListener(view -> {
+            Intent intent = new Intent(MainActivity.this, NewSnippetActivity.class);
+            startActivityForResult(intent, NEW_SNIPPET_ACTIVITY_REQUEST_CODE);
         });
 
         // instantiate ViewModel
         snippetViewModel = ViewModelProviders.of(this).get(SnippetViewModel.class);
         // ensure the recycler view stays updated with the current db state
-        snippetViewModel.getAllSnippets().observe(this, new Observer<List<Snippet>>() {
-            @Override
-            public void onChanged(@Nullable List<Snippet> snippets) {
-                adapter.setSnippets(snippets);
-            }
-        });
+        snippetViewModel.getAllSnippets().observe(this, adapter::setSnippets);
 
         // react to touches on the recycler view list
         recyclerView.addOnItemTouchListener(new RecyclerTouchListener(getApplicationContext(), recyclerView,
@@ -117,19 +115,19 @@ public class MainActivity extends AppCompatActivity {
 
         // a new snippet was successfully inserted
         if (requestCode == NEW_SNIPPET_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK) {
-            // insert snippet into db
+            // make new snippet
             String name = data.getStringExtra(NewSnippetActivity.NAME);
             String text = data.getStringExtra(NewSnippetActivity.TEXT);
             Snippet snippet = new Snippet(name, text);
 
-            // parse tags and store them in the db
+            // parse tags
             String tags = data.getStringExtra(NewSnippetActivity.TAGS);
-            TAGS_LIST = Arrays.asList(tags.split(","));
-            for (String tag : TAGS_LIST) {
-                tag = tag.trim();
-            }
+            String[] list = tags.split(",");
+            ArrayList<Tag> tagsList = new ArrayList<>();
+            Arrays.stream(list).forEach(s -> tagsList.add(new Tag(s.trim())));
 
-            long snippetId = snippetViewModel.insert(snippet);
+            snippet.setTags(tagsList);
+            snippetViewModel.insert(snippet);
 
         } else {
             Toast.makeText(getApplicationContext(), R.string.empty_not_saved, Toast.LENGTH_LONG)
@@ -154,7 +152,4 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public static void saveTagsForSnippetId(List<String> tags, long snippetId) {
-
-    }
 }

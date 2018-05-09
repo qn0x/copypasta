@@ -38,7 +38,10 @@ public class SnippetViewModel extends AndroidViewModel {
     }
 
     public long insert(Snippet snippet) {
-        long id = snippetRepository.insert(snippet);
-        return id;
+        return snippetRepository.insert(snippet);
+    }
+
+    public void insert(Tag tag) {
+        snippetRepository.insert(tag);
     }
 }
