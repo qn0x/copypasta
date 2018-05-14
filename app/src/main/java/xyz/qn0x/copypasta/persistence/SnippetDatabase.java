@@ -14,6 +14,11 @@ import xyz.qn0x.copypasta.persistence.entities.Snippet;
 import xyz.qn0x.copypasta.persistence.entities.SnippetTags;
 import xyz.qn0x.copypasta.persistence.entities.Tag;
 
+/**
+ * Class that represents the database. Framework used: Room
+ *
+ * @author Janine Kostka
+ */
 @Database(entities = {
         Snippet.class, Tag.class, SnippetTags.class},
         version = 1,

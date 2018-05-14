@@ -1,10 +1,8 @@
 package xyz.qn0x.copypasta.ui.activities;
 
-import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -19,32 +17,36 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import com.facebook.stetho.Stetho;
+
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
 
 import xyz.qn0x.copypasta.R;
+import xyz.qn0x.copypasta.SnippetViewModel;
+import xyz.qn0x.copypasta.persistence.entities.Snippet;
 import xyz.qn0x.copypasta.persistence.entities.Tag;
 import xyz.qn0x.copypasta.ui.utility.RecyclerTouchListener;
 import xyz.qn0x.copypasta.ui.utility.SnippetAdapter;
-import xyz.qn0x.copypasta.SnippetViewModel;
-import xyz.qn0x.copypasta.persistence.entities.Snippet;
 
 
+/**
+ * Handles activity: main activity
+ *
+ * @author Janine Kostka
+ */
 public class MainActivity extends AppCompatActivity {
 
     public static final int NEW_SNIPPET_ACTIVITY_REQUEST_CODE = 1;
 
     private SnippetViewModel snippetViewModel;
-    public static long SNIPPET_ID = -1;
-    public static List<Long> TAG_IDS = new ArrayList<>();
-    public static boolean SNIPPET_DONE = false;
-    public static boolean TAGS_DONE = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Stetho.initializeWithDefaults(this);
+
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.main_toolbar);
         setSupportActionBar(toolbar);

@@ -19,11 +19,11 @@ public interface TagDao {
     @Query("SELECT * FROM tags WHERE tag = :tagName")
     LiveData<List<Tag>> getTagByTagName(String tagName);
 
-    @Query("SELECT * FROM tags WHERE id = :tagId")
+    @Query("SELECT * FROM tags WHERE tag = :tagId")
     LiveData<Tag> getTagById(int tagId);
 
-    @Query("SELECT * FROM tags WHERE tags.id IN " +
-            "(SELECT tag_id FROM snippetTags WHERE snippet_id = :snippetId)")
+    @Query("SELECT * FROM tags WHERE tags.tag IN " +
+            "(SELECT tag FROM snippetTags WHERE snippet_id = :snippetId)")
     LiveData<List<Tag>> getTagsForSnippetId(int snippetId);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
