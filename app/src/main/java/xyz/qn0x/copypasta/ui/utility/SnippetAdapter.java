@@ -48,11 +48,17 @@ public class SnippetAdapter extends RecyclerView.Adapter<SnippetAdapter.SnippetV
         Snippet snippet = snippetList.get(position);
         holder.name.setText(snippet.getName());
         holder.text.setText(snippet.getText());
-        //holder.tags.setText(snippet.getTags());
+        StringBuilder tags = new StringBuilder("");
+        snippet.getTags().forEach(tag -> {
+            tags.append(tag.getTag()).append(",");
+        });
+        if (tags.length() > 0)
+            tags.deleteCharAt(tags.length() - 1);
+        holder.tags.setText(tags.toString());
     }
 
-    public void setSnippets(List<Snippet> words){
-        snippetList = words;
+    public void setSnippets(List<Snippet> snippets) {
+        snippetList = snippets;
         notifyDataSetChanged();
     }
 

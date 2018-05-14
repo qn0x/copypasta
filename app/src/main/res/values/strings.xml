@@ -14,4 +14,5 @@
     <string name="title_activity_new_snippet">Add a new Snippet</string>
     <string name="title_activity_view_snippet">Your Snippet</string>
     <string name="action_edit">Edit</string>
+    <string name="action_delete">Delete</string>
 </resources>

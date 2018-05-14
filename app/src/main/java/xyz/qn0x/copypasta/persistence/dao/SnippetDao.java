@@ -20,6 +20,6 @@ public interface SnippetDao {
     LiveData<List<Snippet>> getAllSnippets();
 
     @Query("SELECT * FROM snippets WHERE snippets.id IN " +
-            "(SELECT snippet_id FROM snippetTags WHERE tag_id = :tagId)")
+            "(SELECT snippet_id FROM snippetTags WHERE tag = :tagId)")
     LiveData<List<Snippet>> getSnippetsByTag(String tagId);
 }

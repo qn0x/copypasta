@@ -3,7 +3,9 @@ package xyz.qn0x.copypasta.persistence;
 import android.app.Application;
 import android.arch.lifecycle.LiveData;
 import android.os.AsyncTask;
+import android.util.Log;
 
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -13,15 +15,27 @@ import xyz.qn0x.copypasta.persistence.dao.TagDao;
 import xyz.qn0x.copypasta.persistence.entities.Snippet;
 import xyz.qn0x.copypasta.persistence.entities.SnippetTags;
 import xyz.qn0x.copypasta.persistence.entities.Tag;
-import xyz.qn0x.copypasta.ui.activities.MainActivity;
 
+/**
+ * Repository for snippets.
+ * <p>
+ * Handles CRUD operations for snippets.
+ *
+ * @author Janine Kostka
+ */
 public class SnippetRepository {
+
+    private static final String TAG = "SnippetRepository";
+
     private SnippetDao snippetDao;
     private TagDao tagDao;
     private SnippetTagsDao snippetTagsDao;
+
+    // containers that hold the state of the db content in the application
     private LiveData<List<Snippet>> allSnippets;
     private LiveData<List<Tag>> allTags;
     private LiveData<List<SnippetTags>> allSnippetTags;
+
 
     public SnippetRepository(Application application) {
         SnippetDatabase db = SnippetDatabase.getDatabase(application);
@@ -33,13 +47,33 @@ public class SnippetRepository {
         allSnippetTags = snippetTagsDao.getAllSnippetTags();
     }
 
+    /**
+     * Inserts a snippet into the db.
+     * <p>
+     * The operation is called asynchronously from the UI thread.
+     *
+     * @param snippet snippet to insert into the db
+     * @return id of the inserted snippet
+     */
     public long insert(Snippet snippet) {
-        // TODO
         new insertSnippetTask(snippetDao, tagDao, snippetTagsDao).execute(snippet);
         return snippet.getId();
     }
 
-    // make sure data is inserted outside of UI thread
+    /**
+     * Inserts a tag asynchronously into the db.
+     *
+     * @param tags tag to insert
+     */
+    public void insert(Tag... tags) {
+        new insertTagsTask(tagDao).execute(tags);
+    }
+
+
+    // ----------------------------------------------------------------------------
+    // the following classes make sure data is inserted outside of UI thread
+    // ----------------------------------------------------------------------------
+
     private static class insertSnippetTask extends AsyncTask<Snippet, Void, Long> {
 
         private SnippetDao snippetDao;
@@ -61,43 +95,41 @@ public class SnippetRepository {
 
         @Override
         protected void onPostExecute(Long snippetId) {
+            Log.d(TAG, "saved snippet with id " + snippetId);
             snippet.setId(snippetId);
             new insertTagsTask(tagDao, snippetTagsDao, snippet).execute(snippet.getTags()
                     .toArray(new Tag[snippet.getTags().size()]));
         }
     }
 
-    public void insert(Tag... tags) {
-        new insertTagsTask(tagDao).execute(tags);
-    }
-
     private static class insertTagsTask extends AsyncTask<Tag, Void, List<Long>> {
 
-        private TagDao mAsyncTaskDao;
+        private TagDao tagsDao;
         private Snippet snippet;
         private SnippetTagsDao snippetTagsDao;
 
         insertTagsTask(TagDao dao) {
-            mAsyncTaskDao = dao;
+            tagsDao = dao;
         }
 
         insertTagsTask(TagDao dao, SnippetTagsDao snippetTagsDao, Snippet snippet) {
-            mAsyncTaskDao = dao;
+            tagsDao = dao;
             this.snippet = snippet;
             this.snippetTagsDao = snippetTagsDao;
         }
 
         @Override
         protected List<Long> doInBackground(Tag... tags) {
-            return mAsyncTaskDao.insert(tags);
+            return tagsDao.insert(tags);
         }
 
         @Override
         protected void onPostExecute(List<Long> tagIds) {
-            tagIds.forEach(System.out::println);
             List<SnippetTags> snippetTags = new LinkedList<>();
-            tagIds.forEach(id -> snippetTags.add(new SnippetTags(snippet.getId(), id)));
-            System.out.println(snippet.getId());
+            snippet.getTags().forEach(id -> {
+                snippetTags.add(new SnippetTags(snippet.getId(), new Tag(id.getTag())));
+                Log.d(TAG, "saved tag with id " + id.getTag());
+            });
             new insertSnippetTagsTask(snippetTagsDao).execute(snippetTags.toArray(new SnippetTags[snippetTags.size()]));
         }
     }
@@ -117,8 +149,9 @@ public class SnippetRepository {
         }
     }
 
+
     // -----------------------------------------------------------------------------------------
-    // repository contents
+    // repository content holders
     // -----------------------------------------------------------------------------------------
 
     public LiveData<List<SnippetTags>> getAllSnippetTags() {

@@ -17,6 +17,6 @@ public interface SnippetTagsDao {
     @Query("SELECT * FROM snippetTags ORDER BY snippet_id ASC")
     LiveData<List<SnippetTags>> getAllSnippetTags();
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.ABORT)
     void insert(SnippetTags... snippetTags);
 }

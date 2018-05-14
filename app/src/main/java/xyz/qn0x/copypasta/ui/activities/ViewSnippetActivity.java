@@ -49,9 +49,11 @@ public class ViewSnippetActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.edit:
+            case R.id.action_edit:
                 Toast.makeText(getApplicationContext(), "edit clicked", Toast.LENGTH_SHORT).show();
                 return true;
+            case R.id.action_delete:
+                Toast.makeText(getApplicationContext(), "delete clicked", Toast.LENGTH_SHORT).show();
 
             default:
                 return super.onOptionsItemSelected(item);

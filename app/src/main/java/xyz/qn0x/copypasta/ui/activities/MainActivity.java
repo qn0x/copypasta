@@ -1,10 +1,8 @@
 package xyz.qn0x.copypasta.ui.activities;
 
-import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -13,11 +11,14 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
+
+import com.facebook.stetho.Stetho;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -25,26 +26,34 @@ import java.util.LinkedList;
 import java.util.List;
 
 import xyz.qn0x.copypasta.R;
+import xyz.qn0x.copypasta.SnippetViewModel;
+import xyz.qn0x.copypasta.persistence.entities.Snippet;
+import xyz.qn0x.copypasta.persistence.entities.SnippetTags;
 import xyz.qn0x.copypasta.persistence.entities.Tag;
 import xyz.qn0x.copypasta.ui.utility.RecyclerTouchListener;
 import xyz.qn0x.copypasta.ui.utility.SnippetAdapter;
-import xyz.qn0x.copypasta.SnippetViewModel;
-import xyz.qn0x.copypasta.persistence.entities.Snippet;
 
 
+/**
+ * Handles activity: main activity
+ *
+ * @author Janine Kostka
+ */
+
+// TODO Bug: Tags werden erst nach 1x auswählen + zurück eines Snippets angezeigt.
 public class MainActivity extends AppCompatActivity {
 
     public static final int NEW_SNIPPET_ACTIVITY_REQUEST_CODE = 1;
+    private static final String TAG = "MainActivity";
 
     private SnippetViewModel snippetViewModel;
-    public static long SNIPPET_ID = -1;
-    public static List<Long> TAG_IDS = new ArrayList<>();
-    public static boolean SNIPPET_DONE = false;
-    public static boolean TAGS_DONE = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Stetho.initializeWithDefaults(this);
+
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.main_toolbar);
         setSupportActionBar(toolbar);
@@ -70,7 +79,22 @@ public class MainActivity extends AppCompatActivity {
         // instantiate ViewModel
         snippetViewModel = ViewModelProviders.of(this).get(SnippetViewModel.class);
         // ensure the recycler view stays updated with the current db state
-        snippetViewModel.getAllSnippets().observe(this, adapter::setSnippets);
+        List<Snippet> snippetList = new LinkedList<>();
+        snippetViewModel.getAllSnippets().observe(this, snippets -> {
+            snippetList.addAll(snippets);
+            adapter.setSnippets(snippets);
+        });
+        snippetViewModel.getAllSnippetTags().observe(this, snippetTags -> {
+            if (snippetTags != null) {
+                snippetList.forEach(snippet -> {
+                    snippetTags.forEach(snippetTag -> {
+                        if (snippet.getId() == snippetTag.getSnippet_id()) {
+                            snippet.getTags().add(snippetTag.getTag());
+                        }
+                    });
+                });
+            }
+        });
 
         // react to touches on the recycler view list
         recyclerView.addOnItemTouchListener(new RecyclerTouchListener(getApplicationContext(), recyclerView,
@@ -82,11 +106,19 @@ public class MainActivity extends AppCompatActivity {
                                     Toast.LENGTH_SHORT).show();
                         } else {
                             Snippet snippet = snippetViewModel.getAllSnippets().getValue().get(position);
-                            Toast.makeText(getApplicationContext(), snippet.getName() + " is selected!",
+                            Toast.makeText(getApplicationContext(), snippet.getName() + " is selected! id: " + snippet.getId(),
                                     Toast.LENGTH_SHORT).show();
                             Intent intent = new Intent(MainActivity.this, ViewSnippetActivity.class);
                             intent.putExtra("ID", snippet.getName());
-                            //intent.putExtra("TAGS", snippet.getTags());
+                            StringBuilder sb = new StringBuilder("");
+                            if (snippet.getTags() != null || snippet.getTags().size() != 0) {
+                                snippet.getTags().forEach(tag -> {
+                                    sb.append(tag.getTag()).append(",");
+                                });
+                                if (sb.length() > 0)
+                                    sb.deleteCharAt(sb.length() - 1);
+                            }
+                            intent.putExtra("TAGS", sb.toString());
                             intent.putExtra("TEXT", snippet.getText());
                             startActivity(intent);
                         }
@@ -148,6 +180,7 @@ public class MainActivity extends AppCompatActivity {
                 return true;
 
             default:
+                Log.wtf(TAG, "Options menu recorded a nonexistent action");
                 return super.onOptionsItemSelected(item);
         }
     }

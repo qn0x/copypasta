@@ -4,6 +4,7 @@ import android.arch.persistence.db.SupportSQLiteDatabase;
 import android.arch.persistence.room.Database;
 import android.arch.persistence.room.Room;
 import android.arch.persistence.room.RoomDatabase;
+import android.arch.persistence.room.TypeConverters;
 import android.content.Context;
 import android.support.annotation.NonNull;
 
@@ -14,10 +15,16 @@ import xyz.qn0x.copypasta.persistence.entities.Snippet;
 import xyz.qn0x.copypasta.persistence.entities.SnippetTags;
 import xyz.qn0x.copypasta.persistence.entities.Tag;
 
+/**
+ * Class that represents the database. Framework used: Room
+ *
+ * @author Janine Kostka
+ */
 @Database(entities = {
         Snippet.class, Tag.class, SnippetTags.class},
         version = 1,
         exportSchema = false)
+@TypeConverters(TagConverter.class)
 public abstract class SnippetDatabase extends RoomDatabase {
 
     private static SnippetDatabase INSTANCE = null;

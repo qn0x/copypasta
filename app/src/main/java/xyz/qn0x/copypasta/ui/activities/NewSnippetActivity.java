@@ -3,7 +3,6 @@ package xyz.qn0x.copypasta.ui.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -11,12 +10,16 @@ import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import xyz.qn0x.copypasta.R;
 
+
+/**
+ * Handles activity: create a new snippet
+ *
+ * @author Janine Kostka
+ */
 public class NewSnippetActivity extends AppCompatActivity {
 
     public static final String NAME = "NAME";
@@ -31,6 +34,8 @@ public class NewSnippetActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_snippet);
+
+        // add app bar
         Toolbar toolbar = findViewById(R.id.new_snippet_toolbar);
         setSupportActionBar(toolbar);
         ActionBar ab = getSupportActionBar();
@@ -42,12 +47,7 @@ public class NewSnippetActivity extends AppCompatActivity {
         snippetTextView = findViewById(R.id.snippetText);
 
         FloatingActionButton fab = findViewById(R.id.saveButton);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                saveAndFinish();
-            }
-        });
+        fab.setOnClickListener(view -> saveAndFinish());
     }
 
     @Override
@@ -68,6 +68,9 @@ public class NewSnippetActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Gathers the user-entered data and closes the activity
+     */
     private void saveAndFinish() {
         Intent replyIntent = new Intent();
         if (TextUtils.isEmpty(snippetNameView.getText()) ||

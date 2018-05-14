@@ -7,6 +7,7 @@ import android.arch.persistence.room.Index;
 import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.NonNull;
 
+import java.util.LinkedList;
 import java.util.List;
 
 
@@ -29,6 +30,7 @@ public class Snippet {
     public Snippet(@NonNull String name, String text) {
         this.name = name;
         this.text = text;
+        this.tags = new LinkedList<>();
     }
 
     public long getId() {
