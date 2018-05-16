@@ -28,7 +28,6 @@ import java.util.List;
 import xyz.qn0x.copypasta.R;
 import xyz.qn0x.copypasta.SnippetViewModel;
 import xyz.qn0x.copypasta.persistence.entities.Snippet;
-import xyz.qn0x.copypasta.persistence.entities.SnippetTags;
 import xyz.qn0x.copypasta.persistence.entities.Tag;
 import xyz.qn0x.copypasta.ui.utility.RecyclerTouchListener;
 import xyz.qn0x.copypasta.ui.utility.SnippetAdapter;
@@ -86,13 +85,11 @@ public class MainActivity extends AppCompatActivity {
         });
         snippetViewModel.getAllSnippetTags().observe(this, snippetTags -> {
             if (snippetTags != null) {
-                snippetList.forEach(snippet -> {
-                    snippetTags.forEach(snippetTag -> {
-                        if (snippet.getId() == snippetTag.getSnippet_id()) {
-                            snippet.getTags().add(snippetTag.getTag());
-                        }
-                    });
-                });
+                snippetList.forEach(snippet -> snippetTags.forEach(snippetTag -> {
+                    if (snippet.getId() == snippetTag.getSnippet_id()) {
+                        snippet.getTags().add(snippetTag.getTag());
+                    }
+                }));
             }
         });
 
@@ -112,9 +109,7 @@ public class MainActivity extends AppCompatActivity {
                             intent.putExtra("ID", snippet.getName());
                             StringBuilder sb = new StringBuilder("");
                             if (snippet.getTags() != null || snippet.getTags().size() != 0) {
-                                snippet.getTags().forEach(tag -> {
-                                    sb.append(tag.getTag()).append(",");
-                                });
+                                snippet.getTags().forEach(tag -> sb.append(tag.getTag()).append(","));
                                 if (sb.length() > 0)
                                     sb.deleteCharAt(sb.length() - 1);
                             }

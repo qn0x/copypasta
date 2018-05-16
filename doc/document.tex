@@ -2,6 +2,10 @@
 
 \usepackage[utf8]{inputenc}
 \usepackage[ngerman]{babel}
+\usepackage[hyphens]{url}
+\usepackage{hyperref}
+\usepackage{graphicx}
+\usepackage{float}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -27,7 +31,7 @@
 	Dabei könnte die App (falls möglich) auch auf die System-Zwischenablage zugreifen, um das Ganze ein wenig zu erleichtern. \\
 	Der Benutzer soll in der App einstellen können, welche Textschnipsel später auf der Tastatur angezeigt werden können. \\
 	
-	Für die Tastatur soll eine eigene sogenannte Input Method mittels der bereitgestellten API (https://developer.android.com/guide/topics/text/creating-input-method.html) geschrieben werden. Statt den einzelnen Tasten sollen dann Inhalte aus der App angezeigt werden, die vom Nutzer selbst festgelegt werden können.\\
+	\noindent Für die Tastatur soll eine eigene sogenannte Input Method mittels der bereitgestellten API \sloppy\url{https://developer.android.com/guide/topics/text/creating-input-method.html} geschrieben werden. Statt den einzelnen Tasten sollen dann Inhalte aus der App angezeigt werden, die vom Nutzer selbst festgelegt werden können.\\
 
 	Das Projekt besteht also aus zwei Komponenten:
 	\begin{enumerate}
@@ -57,11 +61,21 @@
 % Kurzer Überblick über den Ablauf der Implementierung
 	\subsection{Architektur}
 		Welche Frameworks wurden benutzt? Welche Zusammenhänge sind zwischen den Modulen etc.?
+		\subsubsection{Persistence Layer - Room-Framework}
+		    \begin{figure}[H]
+		        \centering
+		        \includegraphics[width=1.0\textwidth]{Konzepte/roomArch.png}
+		        \caption{Room-Architektur (\sloppy\url{https://codelabs.developers.google.com/codelabs/android-room-with-a-view/})}
+		        \label{fig:room_arch}
+		    \end{figure}
 	\subsection{Workflow der Dialoge}
 		\subsubsection{App}
 		\subsubsection{Tastatur}
 
 	\subsection{Probleme und deren Lösung}
+	    \subsubsection{Persistenz mit Room-Library}
+	        Die Textschnipsel sollten in der nativen SQLite-Datenbank gespeichert werden. Wie im Teil der Archtitektur schon beschrieben, werden diese in insgesamt drei Tabellen gespeichert. Diese bilden eine Many-to-many-Relation auf der Datenbankebene ab, da Room nur Annotationen für One-to-Many Relationen bietet. Dementsprechend musste entprechend ein DAO für diese Hilfstabelle erstellt werden. \\
+	        Schlussendlich war durch die Entscheidung alle Tags nicht csv in einem Attribut pro Element zu speichern dafür gut, dass die Suchfunktion in der App auch in der Lage war nach Tags zu suchen.
 
 \section{Wer hat was gemacht?}
 \section{Notizen}
