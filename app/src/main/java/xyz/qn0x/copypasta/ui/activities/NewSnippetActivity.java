@@ -25,6 +25,9 @@ public class NewSnippetActivity extends AppCompatActivity {
     public static final String NAME = "NAME";
     public static final String TAGS = "TAGS";
     public static final String TEXT = "TEXT";
+    public static final String FAV = "FAV";
+
+    private boolean favorite = false;
 
     private EditText snippetNameView;
     private EditText snippetTextView;
@@ -60,6 +63,15 @@ public class NewSnippetActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case R.id.app_bar_favorite:
+                if (!favorite) {
+                    item.setIcon(R.drawable.ic_favorite_black_24dp);
+                    favorite = true;
+                } else {
+                    item.setIcon(R.drawable.ic_favorite_border_black_24dp);
+                    favorite = false;
+                }
+                return true;
             case R.id.app_bar_save:
                 saveAndFinish();
                 return true;
@@ -86,6 +98,8 @@ public class NewSnippetActivity extends AppCompatActivity {
 
             String tags = snippetTagsView.getText().toString();
             replyIntent.putExtra(TAGS, tags);
+
+            replyIntent.putExtra(FAV, favorite);
 
             setResult(RESULT_OK, replyIntent);
         }

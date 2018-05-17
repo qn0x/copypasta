@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -14,6 +15,10 @@ import android.widget.Toast;
 import xyz.qn0x.copypasta.R;
 
 public class ViewSnippetActivity extends AppCompatActivity {
+
+    private static final String TAG = "ViewSnippetActivity";
+
+    private boolean favorite = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +41,11 @@ public class ViewSnippetActivity extends AppCompatActivity {
 
         TextView vText = findViewById(R.id.content_text);
         vText.setText(intent.getStringExtra("TEXT"));
+
+        favorite = intent.getBooleanExtra("FAV", false);
+
+        Log.d(TAG, "Selected Snippet. ID: " + intent.getStringExtra("ID") + "  FAV: "
+                + intent.getBooleanExtra("FAV", false));
     }
 
     // draw app bar options
@@ -43,12 +53,24 @@ public class ViewSnippetActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_view_snippet, menu);
+
+        // set favorite state of the snippet
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        MenuItem favoriteIcon = toolbar.getMenu().findItem(R.id.action_view_fav);
+        if (favorite) {
+            favoriteIcon.setIcon(R.drawable.ic_favorite_black_24dp);
+        } else {
+            favoriteIcon.setIcon(R.drawable.ic_favorite_border_black_24dp);
+        }
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case R.id.action_view_fav:
+                // TODO update favorite status in db here
+                return true;
             case R.id.action_edit:
                 Toast.makeText(getApplicationContext(), "edit clicked", Toast.LENGTH_SHORT).show();
                 return true;

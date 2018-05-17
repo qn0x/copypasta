@@ -107,6 +107,7 @@ public class MainActivity extends AppCompatActivity {
                                     Toast.LENGTH_SHORT).show();
                             Intent intent = new Intent(MainActivity.this, ViewSnippetActivity.class);
                             intent.putExtra("ID", snippet.getName());
+
                             StringBuilder sb = new StringBuilder("");
                             if (snippet.getTags() != null || snippet.getTags().size() != 0) {
                                 snippet.getTags().forEach(tag -> sb.append(tag.getTag()).append(","));
@@ -114,7 +115,10 @@ public class MainActivity extends AppCompatActivity {
                                     sb.deleteCharAt(sb.length() - 1);
                             }
                             intent.putExtra("TAGS", sb.toString());
+
                             intent.putExtra("TEXT", snippet.getText());
+                            intent.putExtra("FAV", snippet.isFavorite());
+                            Log.d(TAG, "view snippet ID: " + snippet.getId() + " FAV: " + snippet.isFavorite());
                             startActivity(intent);
                         }
                     }
@@ -142,19 +146,30 @@ public class MainActivity extends AppCompatActivity {
 
         // a new snippet was successfully inserted
         if (requestCode == NEW_SNIPPET_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK) {
+            StringBuilder log = new StringBuilder();
+
             // make new snippet
             String name = data.getStringExtra(NewSnippetActivity.NAME);
             String text = data.getStringExtra(NewSnippetActivity.TEXT);
             Snippet snippet = new Snippet(name, text);
+            log.append("NAME: ").append(name).append("\n");
+            log.append("TEXT: ").append(text).append("\n");
 
             // parse tags
             String tags = data.getStringExtra(NewSnippetActivity.TAGS);
             String[] list = tags.split(",");
             ArrayList<Tag> tagsList = new ArrayList<>();
             Arrays.stream(list).forEach(s -> tagsList.add(new Tag(s.trim())));
-
             snippet.setTags(tagsList);
+            log.append(tags).append("\n");
+
+            // set favorite
+            boolean favorite = data.getBooleanExtra(NewSnippetActivity.FAV, false);
+            snippet.setFavorite(favorite);
+            log.append(Boolean.toString(favorite));
+
             snippetViewModel.insert(snippet);
+            Log.d(TAG, log.toString());
 
         } else {
             Toast.makeText(getApplicationContext(), R.string.empty_not_saved, Toast.LENGTH_LONG)

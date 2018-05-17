@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.List;
@@ -24,12 +25,14 @@ public class SnippetAdapter extends RecyclerView.Adapter<SnippetAdapter.SnippetV
 
     public class SnippetViewHolder extends RecyclerView.ViewHolder {
         public TextView name, text, tags;
+        public ImageView favorite;
 
         SnippetViewHolder(View view) {
             super(view);
             name = view.findViewById(R.id.name);
             text = view.findViewById(R.id.text);
             tags = view.findViewById(R.id.tags);
+            favorite = view.findViewById(R.id.list_fav);
         }
     }
 
@@ -46,13 +49,22 @@ public class SnippetAdapter extends RecyclerView.Adapter<SnippetAdapter.SnippetV
     @Override
     public void onBindViewHolder(SnippetViewHolder holder, int position) {
         Snippet snippet = snippetList.get(position);
+
         holder.name.setText(snippet.getName());
         holder.text.setText(snippet.getText());
+
         StringBuilder tags = new StringBuilder("");
         snippet.getTags().forEach(tag -> tags.append(tag.getTag()).append(","));
         if (tags.length() > 0)
             tags.deleteCharAt(tags.length() - 1);
         holder.tags.setText(tags.toString());
+
+        if (snippet.isFavorite()) {
+            holder.favorite.setVisibility(View.VISIBLE);
+        } else {
+            holder.favorite.setVisibility(View.INVISIBLE);
+        }
+
     }
 
     public void setSnippets(List<Snippet> snippets) {

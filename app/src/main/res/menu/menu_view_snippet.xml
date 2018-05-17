@@ -3,6 +3,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="xyz.qn0x.copypasta.ui.activities.ViewSnippetActivity">
     <item
+        android:id="@+id/action_view_fav"
+        android:icon="@drawable/ic_favorite_border_black_24dp"
+        android:title="@string/action_favorite"
+        app:showAsAction="ifRoom" />
+    <item
         android:id="@+id/action_edit"
         android:icon="@drawable/ic_edit_black_24dp"
         android:orderInCategory="100"

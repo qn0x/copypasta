@@ -8,4 +8,9 @@
         android:title="@string/button_save"
         android:visible="true"
         app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/app_bar_favorite"
+        android:icon="@drawable/ic_favorite_border_black_24dp"
+        android:title="@string/action_favorite"
+        app:showAsAction="ifRoom" />
 </menu>
