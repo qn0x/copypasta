@@ -165,4 +165,8 @@ public class SnippetRepository {
     public LiveData<List<Tag>> getAllTags() {
         return allTags;
     }
+
+    public LiveData<List<Snippet>> getSnippetsByName(String name) {
+        return snippetDao.getSnippetsByName("%" + name + "%");
+    }
 }

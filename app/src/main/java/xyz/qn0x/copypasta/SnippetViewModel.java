@@ -52,4 +52,8 @@ public class SnippetViewModel extends AndroidViewModel {
     public void insert(Tag tag) {
         snippetRepository.insert(tag);
     }
+
+    public LiveData<List<Snippet>> getSnippetsByName(String query) {
+        return snippetRepository.getSnippetsByName("%" + query + "%");
+    }
 }

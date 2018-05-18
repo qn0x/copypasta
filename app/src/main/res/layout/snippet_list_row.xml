@@ -15,13 +15,17 @@
         android:layout_alignParentTop="true"
         android:textColor="@color/name"
         android:textSize="16sp"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        android:maxLines="1"
+        android:ellipsize="end" />
 
     <TextView
         android:id="@+id/text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/name" />
+        android:layout_below="@id/name"
+        android:maxLines="2"
+        android:ellipsize="end" />
 
     <TextView
         android:id="@+id/tags"

@@ -1,6 +1,9 @@
 package xyz.qn0x.copypasta.ui.activities;
 
+import android.app.SearchManager;
+import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -16,6 +19,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.SearchView;
 import android.widget.Toast;
 
 import com.facebook.stetho.Stetho;
@@ -51,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        // database reader for debugging purposes
         Stetho.initializeWithDefaults(this);
 
         setContentView(R.layout.activity_main);
@@ -129,6 +134,27 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }));
 
+        // search stuff
+        // Get the intent, verify the action and get the query
+        Intent intent = getIntent();
+        if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
+            String query = intent.getStringExtra(SearchManager.QUERY);
+            Log.d(TAG, "Search query: " + query);
+            List<Snippet> results = doMySearch(query);
+            adapter.setSnippets(results);
+        }
+
+    }
+
+    private List<Snippet> doMySearch(String query) {
+        // we recommend that you return search results to your searchable activity with an Adapter
+        // TODO search stuff here
+        LiveData<List<Snippet>> results = snippetViewModel.getSnippetsByName(query);
+        if (results.getValue() != null) {
+            return results.getValue();
+        } else {
+            return null;
+        }
     }
 
     // draw app bar options
@@ -136,6 +162,13 @@ public class MainActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_main, menu);
+
+        // set up search
+        // TODO what the fuck
+        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        SearchView searchView = (SearchView) menu.findItem(R.id.app_bar_search).getActionView();
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+
         return true;
     }
 

@@ -20,11 +20,13 @@ public class Snippet {
 
     @ColumnInfo(name = "name")
     private String name = "";
-    @ColumnInfo(name = "text")
 
+    @ColumnInfo(name = "text")
     private String text = "";
+
     @ColumnInfo(name = "favorite")
     private boolean favorite = false;
+
     @Ignore
     private List<Tag> tags;
 
