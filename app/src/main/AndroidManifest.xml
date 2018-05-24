@@ -38,9 +38,7 @@
 
         <!-- Optional: an activity for controlling the IME settings -->
 
-
-        <!--
-        Declares the input method service
+        <!-- Declares the input method service -->
         <service
             android:name=".keyboard.SnippetInputService"
             android:label="SnippetKeyboard"
@@ -53,7 +51,8 @@
                 android:resource="@xml/method"
                 />
         </service>
-        -->
+
+
     </application>
 
 </manifest>
