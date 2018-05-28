@@ -1,5 +1,7 @@
 package xyz.qn0x.copypasta.keyboard;
 
+import android.content.res.Resources;
+import android.content.res.XmlResourceParser;
 import android.inputmethodservice.InputMethodService;
 import android.inputmethodservice.Keyboard;
 import android.inputmethodservice.KeyboardView;
@@ -20,16 +22,33 @@ public class SnippetInputService extends InputMethodService implements KeyboardV
     public View onCreateInputView() {
 
         KeyboardView keyboardView = (KeyboardView) getLayoutInflater().inflate(R.layout.keyboard_view, null);
-        Keyboard keyboard = new Keyboard(this, R.xml.number_pad);
+        Keyboard keyboard = new Keyboard(this, R.xml.snippet_pad);
+
 
 
         // TODO hier Snippets aus der Datenbank ziehen und bei Key als android:keyOutputText setzen
         // TODO den Namen als keyLabel nehmen
 
-        keyboard.getKeys().forEach(key -> {
-            key.text = "Hello World!";
-        });
+        // Dummie data
+        String snippetArray[] = {"Snippet 1", "Irgendetwas anderes", "Ja geil, es geht", "Oder auch nicht. Hm."};
+        String nameArray[] = {"Name 1", "ID 2", "Short 3", "Huch_04"};
 
+
+        int i = 0;
+        for (String name : nameArray) {
+
+            Keyboard.Row row = new Keyboard.Row(keyboard);
+            Keyboard.Key key = new Keyboard.Key(row);
+
+
+            key.text = snippetArray[i];
+            key.label = name;
+            i++;
+        }
+
+
+        // Schaltet die Key Preview aus
+        keyboardView.setPreviewEnabled(false);
 
         keyboardView.setKeyboard(keyboard);
         keyboardView.setOnKeyboardActionListener(this);
