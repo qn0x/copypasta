@@ -34,6 +34,10 @@ public class SnippetInputService extends InputMethodService implements KeyboardV
         String nameArray[] = {"Name 1", "ID 2", "Short 3", "Huch_04"};
 
 
+        // Irgendetwas damit gefunden, funktioniert aber scheinbar nur für chars
+        //Resources res = getResources();
+        //XmlResourceParser pars = res.getXml(R.xml.snippet_pad);
+
         int i = 0;
         for (String name : nameArray) {
 
