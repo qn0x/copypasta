@@ -1,15 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.inputmethodservice.KeyboardView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.inputmethodservice.KeyboardView xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/keyboard_view"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_alignParentBottom="true"
-    android:background="@android:color/white"
-    android:keyTextColor="@android:color/black"
-    android:keyBackground="@color/keyBackground">
-
-    <!-- Not needed -->
-    <!-- android:keyPreviewLayout="@layout/key_preview" -->
+    android:background="@color/white"
+    android:keyBackground="@color/name"
+    android:keyTextColor="@android:color/black">
 
 </android.inputmethodservice.KeyboardView>

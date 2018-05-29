@@ -3,6 +3,7 @@ package xyz.qn0x.copypasta;
 import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
+import android.util.Log;
 
 import java.util.List;
 
@@ -17,6 +18,9 @@ import xyz.qn0x.copypasta.persistence.entities.Tag;
  * @author Janine Kostka
  */
 public class SnippetViewModel extends AndroidViewModel {
+
+    private final static String TAG = "SnippetViewModel";
+
     // source of data
     private SnippetRepository snippetRepository;
 
@@ -54,6 +58,12 @@ public class SnippetViewModel extends AndroidViewModel {
     }
 
     public LiveData<List<Snippet>> getSnippetsByName(String query) {
-        return snippetRepository.getSnippetsByName("%" + query + "%");
+        String sqlQuery = /*"%" + */query/* + "%"*/;
+        Log.d(TAG, "searching database with query: " + sqlQuery);
+        return snippetRepository.getSnippetsByName(sqlQuery);
+    }
+
+    public List<Snippet> getAllFavorites() {
+        return snippetRepository.getAllFavorites();
     }
 }

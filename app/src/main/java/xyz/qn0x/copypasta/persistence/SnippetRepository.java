@@ -35,6 +35,7 @@ public class SnippetRepository {
     private LiveData<List<Snippet>> allSnippets;
     private LiveData<List<Tag>> allTags;
     private LiveData<List<SnippetTags>> allSnippetTags;
+    private List<Snippet> allFavorites;
 
 
     public SnippetRepository(Application application) {
@@ -45,6 +46,7 @@ public class SnippetRepository {
         allTags = tagDao.getAllTags();
         allSnippets = snippetDao.getAllSnippets();
         allSnippetTags = snippetTagsDao.getAllSnippetTags();
+        allFavorites = snippetDao.getAllFavorites();
     }
 
     /**
@@ -167,6 +169,10 @@ public class SnippetRepository {
     }
 
     public LiveData<List<Snippet>> getSnippetsByName(String name) {
-        return snippetDao.getSnippetsByName("%" + name + "%");
+        return snippetDao.getSnippetsByName(name);
+    }
+
+    public List<Snippet> getAllFavorites() {
+        return allFavorites;
     }
 }

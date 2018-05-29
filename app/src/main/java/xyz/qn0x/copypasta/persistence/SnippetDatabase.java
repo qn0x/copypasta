@@ -35,6 +35,7 @@ public abstract class SnippetDatabase extends RoomDatabase {
                 if (INSTANCE == null) {
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
                             SnippetDatabase.class, "snippet_database")
+                            .allowMainThreadQueries()
                             .addCallback(snippetDatabaseCallback)
                             .build();
                 }

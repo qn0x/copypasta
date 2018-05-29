@@ -50,6 +50,7 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
 
     private SnippetViewModel snippetViewModel;
+    public SnippetAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,8 +70,7 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
         recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
-        final SnippetAdapter adapter = new SnippetAdapter(this);
-        recyclerView.setAdapter(adapter);
+        adapter = new SnippetAdapter(this);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         // set up floating action button
@@ -97,6 +97,9 @@ public class MainActivity extends AppCompatActivity {
                 }));
             }
         });
+
+        recyclerView.setAdapter(adapter);
+
 
         // react to touches on the recycler view list
         recyclerView.addOnItemTouchListener(new RecyclerTouchListener(getApplicationContext(), recyclerView,
@@ -133,28 +136,17 @@ public class MainActivity extends AppCompatActivity {
                         Snackbar.make(view, "long click detected", Snackbar.LENGTH_LONG);
                     }
                 }));
-
-        // search stuff
-        // Get the intent, verify the action and get the query
-        Intent intent = getIntent();
-        if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
-            String query = intent.getStringExtra(SearchManager.QUERY);
-            Log.d(TAG, "Search query: " + query);
-            List<Snippet> results = doMySearch(query);
-            adapter.setSnippets(results);
-        }
-
     }
 
     private List<Snippet> doMySearch(String query) {
         // we recommend that you return search results to your searchable activity with an Adapter
         // TODO search stuff here
-        LiveData<List<Snippet>> results = snippetViewModel.getSnippetsByName(query);
-        if (results.getValue() != null) {
-            return results.getValue();
-        } else {
-            return null;
+        if (query.equalsIgnoreCase("")) {
+            Log.d(TAG, "no search query, returning all snippets");
+            return snippetViewModel.getAllSnippets().getValue();
         }
+
+        return null;
     }
 
     // draw app bar options
@@ -165,9 +157,25 @@ public class MainActivity extends AppCompatActivity {
 
         // set up search
         // TODO what the fuck
-        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-        SearchView searchView = (SearchView) menu.findItem(R.id.app_bar_search).getActionView();
-        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+//        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+//        SearchView searchView = (SearchView) menu.findItem(R.id.app_bar_search).getActionView();
+//        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+
+        final SearchView searchView = (SearchView) menu.findItem(R.id.app_bar_search).getActionView();
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                Log.d(TAG, "search query: " + query);
+                List<Snippet> results = doMySearch(query);
+                adapter.setSnippets(results);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+        });
 
         return true;
     }

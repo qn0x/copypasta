@@ -1,7 +1,5 @@
 package xyz.qn0x.copypasta.keyboard;
 
-import android.content.res.Resources;
-import android.content.res.XmlResourceParser;
 import android.inputmethodservice.InputMethodService;
 import android.inputmethodservice.Keyboard;
 import android.inputmethodservice.KeyboardView;
@@ -11,48 +9,44 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.InputConnection;
 
+import java.util.List;
+
 import xyz.qn0x.copypasta.R;
+import xyz.qn0x.copypasta.persistence.SnippetDatabase;
+import xyz.qn0x.copypasta.persistence.dao.SnippetDao;
+import xyz.qn0x.copypasta.persistence.entities.Snippet;
 
 
 public class SnippetInputService extends InputMethodService implements KeyboardView.OnKeyboardActionListener {
 
     private final static String TAG = "SnippetInputService";
 
+    SnippetDatabase db;
+    SnippetDao snippetDao;
+    private List<Snippet> favorites;
+
+
     @Override
     public View onCreateInputView() {
 
         KeyboardView keyboardView = (KeyboardView) getLayoutInflater().inflate(R.layout.keyboard_view, null);
-        Keyboard keyboard = new Keyboard(this, R.xml.snippet_pad);
-
-
-
-        // TODO hier Snippets aus der Datenbank ziehen und bei Key als android:keyOutputText setzen
-        // TODO den Namen als keyLabel nehmen
-
-        // Dummie data
-        String snippetArray[] = {"Snippet 1", "Irgendetwas anderes", "Ja geil, es geht", "Oder auch nicht. Hm."};
-        String nameArray[] = {"Name 1", "ID 2", "Short 3", "Huch_04"};
-
-
-        // Irgendetwas damit gefunden, funktioniert aber scheinbar nur für chars
-        //Resources res = getResources();
-        //XmlResourceParser pars = res.getXml(R.xml.snippet_pad);
-
-        int i = 0;
-        for (String name : nameArray) {
-
-            Keyboard.Row row = new Keyboard.Row(keyboard);
-            Keyboard.Key key = new Keyboard.Key(row);
-
-
-            key.text = snippetArray[i];
-            key.label = name;
-            i++;
-        }
-
-
-        // Schaltet die Key Preview aus
+        Keyboard keyboard = new Keyboard(this, R.xml.keyboard);
         keyboardView.setPreviewEnabled(false);
+
+
+        // pull favorites from the db
+        db = SnippetDatabase.getDatabase(getApplicationContext());
+        snippetDao = db.snippetDao();
+        favorites = snippetDao.getAllFavorites();
+        Log.d(TAG, "loaded " + favorites.size() + " favorites from the database");
+
+        List<Keyboard.Key> keys = keyboard.getKeys();
+
+        // initialize keyboard
+        for (int i = 0; i < favorites.size(); i++) {
+            keys.get(i).text = favorites.get(i).getText();
+            keys.get(i).label = favorites.get(i).getName();
+        }
 
         keyboardView.setKeyboard(keyboard);
         keyboardView.setOnKeyboardActionListener(this);

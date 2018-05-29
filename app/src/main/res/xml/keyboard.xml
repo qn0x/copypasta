@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Keyboard xmlns:android="http://schemas.android.com/apk/res/android"
+    android:horizontalGap="5dp"
+    android:keyHeight="60dp"
+    android:keyWidth="25%p"
+    android:verticalGap="5dp">
+
+    <Row>
+        <Key
+            android:keyEdgeFlags="left"
+            android:keyLabel="default"
+            android:keyOutputText="default" />
+        <Key
+            android:keyLabel="default"
+            android:keyOutputText="default" />
+        <Key
+            android:keyLabel="default"
+            android:keyOutputText="default" />
+        <Key
+            android:keyEdgeFlags="right"
+            android:keyLabel="default"
+            android:keyOutputText="default" />
+    </Row>
+
+    <Row>
+        <Key
+            android:keyEdgeFlags="left"
+            android:keyLabel="default"
+            android:keyOutputText="default" />
+        <Key
+            android:keyLabel="default"
+            android:keyOutputText="default" />
+        <Key
+            android:keyLabel="default"
+            android:keyOutputText="default" />
+        <Key
+            android:keyEdgeFlags="right"
+            android:keyLabel="default"
+            android:keyOutputText="default" />
+    </Row>
+
+</Keyboard>
