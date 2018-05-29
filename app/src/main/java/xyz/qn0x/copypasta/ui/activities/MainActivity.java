@@ -107,7 +107,7 @@ public class MainActivity extends AppCompatActivity {
                             Toast.makeText(getApplicationContext(), "position is null",
                                     Toast.LENGTH_SHORT).show();
                         } else {
-                            Snippet snippet = snippetViewModel.getAllSnippets().getValue().get(position);
+                            Snippet snippet = adapter.getSnippetList().get(position);
                             Toast.makeText(getApplicationContext(), snippet.getName() + " is selected! id: " + snippet.getId(),
                                     Toast.LENGTH_SHORT).show();
                             Intent intent = new Intent(MainActivity.this, ViewSnippetActivity.class);

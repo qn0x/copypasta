@@ -72,6 +72,10 @@ public class SnippetAdapter extends RecyclerView.Adapter<SnippetAdapter.SnippetV
         notifyDataSetChanged();
     }
 
+    public List<Snippet> getSnippetList() {
+        return snippetList;
+    }
+
     @Override
     public int getItemCount() {
         return (snippetList == null ? 0 : snippetList.size());
