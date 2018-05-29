@@ -21,9 +21,10 @@ public class SnippetInputService extends InputMethodService implements KeyboardV
 
     private final static String TAG = "SnippetInputService";
 
-    SnippetDatabase db;
-    SnippetDao snippetDao;
+    private SnippetDatabase db;
+    private SnippetDao snippetDao;
     private List<Snippet> favorites;
+    private int lastInputlength;
 
 
     @Override
@@ -70,6 +71,7 @@ public class SnippetInputService extends InputMethodService implements KeyboardV
 
     }
 
+    // TODO noch wichtig?
     @Override
     public void onKey(int primaryCode, int[] keyCodes) {
 
@@ -96,18 +98,30 @@ public class SnippetInputService extends InputMethodService implements KeyboardV
         }
     }
 
+    /**
+     * commits the corresponding text to the input field
+     *
+     * @param charSequence button pressed (android:outputKeyText)
+     */
     @Override
     public void onText(CharSequence charSequence) {
         Log.d(TAG, "KeyOutputText: " + charSequence.toString());
         InputConnection inputConnection = getCurrentInputConnection();
         if (inputConnection != null) {
+            lastInputlength = charSequence.length();
             inputConnection.commitText(charSequence.toString(), 1);
         }
     }
 
+    /**
+     * deletes the last commited text
+     */
     @Override
     public void swipeLeft() {
-        //TODO evtl Delete auf den eingefügten Text machen
+        InputConnection inputConnection = getCurrentInputConnection();
+        if (inputConnection != null) {
+            inputConnection.deleteSurroundingText(lastInputlength, 0);
+        }
     }
 
     @Override
