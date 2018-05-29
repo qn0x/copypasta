@@ -21,8 +21,6 @@ public class SnippetInputService extends InputMethodService implements KeyboardV
 
     private final static String TAG = "SnippetInputService";
 
-    private SnippetDatabase db;
-    private SnippetDao snippetDao;
     private List<Snippet> favorites;
     private int lastInputlength;
 
@@ -36,8 +34,8 @@ public class SnippetInputService extends InputMethodService implements KeyboardV
 
 
         // pull favorites from the db
-        db = SnippetDatabase.getDatabase(getApplicationContext());
-        snippetDao = db.snippetDao();
+        SnippetDatabase db = SnippetDatabase.getDatabase(getApplicationContext());
+        SnippetDao snippetDao = db.snippetDao();
         favorites = snippetDao.getAllFavorites();
         Log.d(TAG, "loaded " + favorites.size() + " favorites from the database");
 

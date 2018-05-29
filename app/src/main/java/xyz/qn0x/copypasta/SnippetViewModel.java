@@ -57,8 +57,8 @@ public class SnippetViewModel extends AndroidViewModel {
         snippetRepository.insert(tag);
     }
 
-    public LiveData<List<Snippet>> getSnippetsByName(String query) {
-        String sqlQuery = /*"%" + */query/* + "%"*/;
+    public List<Snippet> getSnippetsByName(String query) {
+        String sqlQuery = "%" + query + "%";
         Log.d(TAG, "searching database with query: " + sqlQuery);
         return snippetRepository.getSnippetsByName(sqlQuery);
     }

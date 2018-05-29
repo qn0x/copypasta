@@ -28,7 +28,7 @@ public interface SnippetDao {
     LiveData<List<Snippet>> getSnippetById(long snippetId);
 
     @Query("SELECT * FROM snippets WHERE name LIKE :name")
-    LiveData<List<Snippet>> getSnippetsByName(String name);
+    List<Snippet> getSnippetsByName(String name);
 
     @Query("SELECT * FROM snippets WHERE favorite = 1")
     List<Snippet> getAllFavorites();

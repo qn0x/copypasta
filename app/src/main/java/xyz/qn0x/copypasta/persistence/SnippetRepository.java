@@ -99,8 +99,11 @@ public class SnippetRepository {
         protected void onPostExecute(Long snippetId) {
             Log.d(TAG, "saved snippet with id " + snippetId);
             snippet.setId(snippetId);
-            new insertTagsTask(tagDao, snippetTagsDao, snippet).execute(snippet.getTags()
-                    .toArray(new Tag[snippet.getTags().size()]));
+            if (snippet.getTags().size() >= 1) {
+                Log.d(TAG, "snippet contains tags");
+                new insertTagsTask(tagDao, snippetTagsDao, snippet).execute(snippet.getTags()
+                        .toArray(new Tag[snippet.getTags().size()]));
+            }
         }
     }
 
@@ -168,7 +171,7 @@ public class SnippetRepository {
         return allTags;
     }
 
-    public LiveData<List<Snippet>> getSnippetsByName(String name) {
+    public List<Snippet> getSnippetsByName(String name) {
         return snippetDao.getSnippetsByName(name);
     }
 

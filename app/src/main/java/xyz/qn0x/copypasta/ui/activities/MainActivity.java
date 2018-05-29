@@ -1,9 +1,6 @@
 package xyz.qn0x.copypasta.ui.activities;
 
-import android.app.SearchManager;
-import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.ViewModelProviders;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -139,14 +136,17 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private List<Snippet> doMySearch(String query) {
-        // we recommend that you return search results to your searchable activity with an Adapter
-        // TODO search stuff here
         if (query.equalsIgnoreCase("")) {
             Log.d(TAG, "no search query, returning all snippets");
             return snippetViewModel.getAllSnippets().getValue();
         }
 
-        return null;
+        List<Snippet> result = snippetViewModel.getSnippetsByName(query);
+        for (Snippet s : result) {
+            Log.d(TAG, "found snippet with id " + s.getId());
+        }
+
+        return result;
     }
 
     // draw app bar options
@@ -156,11 +156,7 @@ public class MainActivity extends AppCompatActivity {
         inflater.inflate(R.menu.menu_main, menu);
 
         // set up search
-        // TODO what the fuck
-//        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-//        SearchView searchView = (SearchView) menu.findItem(R.id.app_bar_search).getActionView();
-//        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
-
+        // TODO suche nach text und suche nach tags
         final SearchView searchView = (SearchView) menu.findItem(R.id.app_bar_search).getActionView();
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -173,8 +169,16 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public boolean onQueryTextChange(String newText) {
+                Log.d(TAG, "search query: " + newText);
+                List<Snippet> results = doMySearch(newText);
+                adapter.setSnippets(results);
                 return false;
             }
+        });
+        searchView.setOnCloseListener(() -> {
+            Log.d(TAG, "closing search");
+            adapter.setSnippets(snippetViewModel.getAllSnippets().getValue());
+            return false;
         });
 
         return true;
@@ -198,11 +202,16 @@ public class MainActivity extends AppCompatActivity {
 
             // parse tags
             String tags = data.getStringExtra(NewSnippetActivity.TAGS);
-            String[] list = tags.split(",");
-            ArrayList<Tag> tagsList = new ArrayList<>();
-            Arrays.stream(list).forEach(s -> tagsList.add(new Tag(s.trim())));
-            snippet.setTags(tagsList);
-            log.append(tags).append("\n");
+            if (tags.length() < 1) {
+                String[] list = tags.split(",");
+                ArrayList<Tag> tagsList = new ArrayList<>();
+                Arrays.stream(list).forEach(s -> tagsList.add(new Tag(s.trim())));
+                snippet.setTags(tagsList);
+                log.append(tags).append("\n");
+            } else {
+                Log.d(TAG, "no tags to save");
+                tags = "";
+            }
 
             // set favorite
             boolean favorite = data.getBooleanExtra(NewSnippetActivity.FAV, false);
