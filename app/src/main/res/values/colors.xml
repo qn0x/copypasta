@@ -6,5 +6,6 @@
     <color name="name">#999999</color>
     <color name="text">#222222</color>
     <color name="keyBackground">#EEEEEE</color>
+    <color name="lightGray">#CCCCCC</color>
     <color name="white">#FFFFFF</color>
 </resources>

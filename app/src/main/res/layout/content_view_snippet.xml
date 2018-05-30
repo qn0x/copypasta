@@ -9,69 +9,62 @@
     tools:context=".ui.activities.ViewSnippetActivity"
     tools:showIn="@layout/activity_view_snippet">
 
-    <LinearLayout
+    <TableLayout
         android:id="@+id/linearLayout2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:gravity="left|start"
+        android:padding="10dp"
+        android:gravity="start"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <TextView
-            android:id="@+id/label_name"
-            android:layout_width="31dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Name:"
-            android:textAlignment="viewStart"
-            android:textAllCaps="false"
-            android:textStyle="bold" />
+        <TableRow>
+            <TextView
+                android:id="@+id/label_name"
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Name:"
+                android:textAlignment="viewStart"
+                android:textAllCaps="false"
+                android:textStyle="bold" />
 
-        <TextView
-            android:id="@+id/content_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="left"
-            android:text="Name cannot be empty"
-            android:textAlignment="viewStart" />
-    </LinearLayout>
+            <TextView
+                android:id="@+id/content_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="left"
+                android:text="Name cannot be empty" />
 
-    <LinearLayout
-        android:id="@+id/linearLayout3"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:orientation="horizontal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout2">
+        </TableRow>
 
-        <TextView
-            android:id="@+id/label_tags"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Tags:"
-            android:textAlignment="viewStart"
-            android:textStyle="bold" />
+        <TableRow>
+            <TextView
+                android:id="@+id/label_tags"
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Tags:"
+                android:textAlignment="viewStart"
+                android:textAllCaps="false"
+                android:textStyle="bold" />
 
-        <TextView
-            android:id="@+id/content_tags"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="left"
-            android:text="No tags assigned"
-            android:textAlignment="viewStart" />
-    </LinearLayout>
+            <TextView
+                android:id="@+id/content_tags"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="left"
+                android:text="Name cannot be empty" />
+
+        </TableRow>
+    </TableLayout>
 
     <ScrollView
         android:layout_width="0dp"
@@ -80,10 +73,11 @@
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
+        android:padding="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout3"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout2"
         app:layout_constraintVertical_bias="0.0">
 
         <LinearLayout
