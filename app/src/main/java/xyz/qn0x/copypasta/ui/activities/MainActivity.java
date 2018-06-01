@@ -1,5 +1,6 @@
 package xyz.qn0x.copypasta.ui.activities;
 
+import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
@@ -21,8 +22,6 @@ import android.widget.Toast;
 
 import com.facebook.stetho.Stetho;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
@@ -45,17 +44,24 @@ import xyz.qn0x.copypasta.ui.utility.SnippetAdapter;
 public class MainActivity extends AppCompatActivity {
 
     public static final int NEW_SNIPPET_ACTIVITY_REQUEST_CODE = 1;
+
     private static final String TAG = "MainActivity";
+
+    public static MainActivity instance;
 
     private SnippetViewModel snippetViewModel;
     public SnippetAdapter adapter;
+
+    LiveData<List<Snippet>> liveSnippets;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        instance = this;
+
         // database reader for debugging purposes
-        //Stetho.initializeWithDefaults(this);
+        Stetho.initializeWithDefaults(this);
 
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.main_toolbar);
@@ -79,23 +85,7 @@ public class MainActivity extends AppCompatActivity {
             startActivityForResult(intent, NEW_SNIPPET_ACTIVITY_REQUEST_CODE);
         });
 
-        // instantiate ViewModel
-        snippetViewModel = ViewModelProviders.of(this).get(SnippetViewModel.class);
-        // ensure the recycler view stays updated with the current db state
-        List<Snippet> snippetList = new LinkedList<>();
-        snippetViewModel.getAllSnippets().observe(this, snippets -> {
-            snippetList.addAll(snippets);
-            adapter.setSnippets(snippets);
-        });
-        snippetViewModel.getAllSnippetTags().observe(this, snippetTags -> {
-            if (snippetTags != null) {
-                snippetList.forEach(snippet -> snippetTags.forEach(snippetTag -> {
-                    if (snippet.getId() == snippetTag.getSnippet_id()) {
-                        snippet.getTags().add(snippetTag.getTag());
-                    }
-                }));
-            }
-        });
+        updateAdapter();
 
         recyclerView.setAdapter(adapter);
 
@@ -128,7 +118,7 @@ public class MainActivity extends AppCompatActivity {
 
                             intent.putExtra("TEXT", snippet.getText());
                             intent.putExtra("FAV", snippet.isFavorite());
-                            Log.d(TAG, "view snippet ID: " + snippet.getId() + " FAV: " + snippet.isFavorite());
+                            Log.d(TAG, "view snippet ID: " + snippet.getId() + " FAV: " + snippet.isFavorite() + "Tags: " + sb.toString());
                             startActivity(intent);
                         }
                     }
@@ -140,7 +130,32 @@ public class MainActivity extends AppCompatActivity {
                 }));
     }
 
-    private List<Snippet> doMySearch(String query) {
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
+    public void updateAdapter() {
+        Log.d(TAG, "updating adapter");
+        // instantiate ViewModel
+        snippetViewModel = ViewModelProviders.of(this).get(SnippetViewModel.class);
+        // ensure the recycler view stays updated with the current db state
+        liveSnippets = snippetViewModel.getAllSnippets();
+        snippetViewModel.getAllSnippets().observeForever(snippets -> {
+            for (Snippet snippet : snippets) {
+                List<Tag> tags = snippetViewModel.getTagsForSnippetId(snippet.getId());
+                StringBuilder sb = new StringBuilder();
+                tags.forEach(tag -> sb.append(tag.getTag()).append(" | "));
+                Log.d(TAG, snippet.getName() + " has the following tags: " + sb.toString());
+                snippet.setTags(tags);
+            }
+
+
+            adapter.setSnippets(snippets);
+        });
+    }
+
+    private List<Snippet> doSearch(String query) {
         if (query.equalsIgnoreCase("")) {
             Log.d(TAG, "no search query, returning all snippets");
             return snippetViewModel.getAllSnippets().getValue();
@@ -167,7 +182,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 Log.d(TAG, "search query: " + query);
-                List<Snippet> results = doMySearch(query);
+                List<Snippet> results = doSearch(query);
                 adapter.setSnippets(results);
                 return false;
             }
@@ -175,11 +190,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public boolean onQueryTextChange(String newText) {
                 Log.d(TAG, "search query: " + newText);
-                List<Snippet> results = doMySearch(newText);
+                List<Snippet> results = doSearch(newText);
                 adapter.setSnippets(results);
                 return false;
             }
         });
+
+        // show all snippets after closing the search
         searchView.setOnCloseListener(() -> {
             Log.d(TAG, "closing search");
             adapter.setSnippets(snippetViewModel.getAllSnippets().getValue());
@@ -196,35 +213,7 @@ public class MainActivity extends AppCompatActivity {
 
         // a new snippet was successfully inserted
         if (requestCode == NEW_SNIPPET_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK) {
-            StringBuilder log = new StringBuilder();
-
-            // make new snippet
-            String name = data.getStringExtra(NewSnippetActivity.NAME);
-            String text = data.getStringExtra(NewSnippetActivity.TEXT);
-            Snippet snippet = new Snippet(name, text);
-            log.append("NAME: ").append(name).append("\n");
-            log.append("TEXT: ").append(text).append("\n");
-
-            // parse tags
-            String tags = data.getStringExtra(NewSnippetActivity.TAGS);
-            if (tags.length() < 1) {
-                String[] list = tags.split(",");
-                ArrayList<Tag> tagsList = new ArrayList<>();
-                Arrays.stream(list).forEach(s -> tagsList.add(new Tag(s.trim())));
-                snippet.setTags(tagsList);
-                log.append(tags).append("\n");
-            } else {
-                Log.d(TAG, "no tags to save");
-                tags = "";
-            }
-
-            // set favorite
-            boolean favorite = data.getBooleanExtra(NewSnippetActivity.FAV, false);
-            snippet.setFavorite(favorite);
-            log.append(Boolean.toString(favorite));
-
-            snippetViewModel.insert(snippet);
-            Log.d(TAG, log.toString());
+            updateAdapter();
 
         } else {
             Toast.makeText(getApplicationContext(), R.string.empty_not_saved, Toast.LENGTH_LONG)

@@ -1,5 +1,6 @@
 package xyz.qn0x.copypasta.ui.activities;
 
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -7,12 +8,20 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.EditText;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import xyz.qn0x.copypasta.R;
+import xyz.qn0x.copypasta.SnippetViewModel;
+import xyz.qn0x.copypasta.persistence.entities.Snippet;
+import xyz.qn0x.copypasta.persistence.entities.Tag;
 
 
 /**
@@ -22,10 +31,7 @@ import xyz.qn0x.copypasta.R;
  */
 public class NewSnippetActivity extends AppCompatActivity {
 
-    public static final String NAME = "NAME";
-    public static final String TAGS = "TAGS";
-    public static final String TEXT = "TEXT";
-    public static final String FAV = "FAV";
+    private static final String TAG = "NewSnippetActivity";
 
     private boolean favorite = false;
 
@@ -90,19 +96,49 @@ public class NewSnippetActivity extends AppCompatActivity {
                 TextUtils.isEmpty(snippetTextView.getText())) {
             setResult(RESULT_CANCELED, replyIntent);
         } else {
+            StringBuilder log = new StringBuilder();
+
+            // make new snippet
             String name = snippetNameView.getText().toString();
-            replyIntent.putExtra(NAME, name);
-
             String text = snippetTextView.getText().toString();
-            replyIntent.putExtra(TEXT, text);
+            Snippet snippet = new Snippet(name, text);
+            log.append("NAME: ").append(name).append("\n");
+            log.append("TEXT: ").append(text).append("\n");
 
+            // parse tags
             String tags = snippetTagsView.getText().toString();
-            replyIntent.putExtra(TAGS, tags);
+            ArrayList<String> tagsArray = new ArrayList<>();
+            String[] list = tags.split(",");
+            Arrays.stream(list).forEach(s -> {
+                tagsArray.add(s.trim());
+                log.append(s);
+                log.append(" + ");
+            });
+            if (tagsArray.size() >= 1) {
+                List<Tag> tagsList = new ArrayList<>();
+                tagsArray.forEach(t -> tagsList.add(new Tag(t)));
+                snippet.setTags(tagsList);
+                log.append(tags).append("\n");
+            } else {
+                Log.d(TAG, "no tags to save");
+            }
 
-            replyIntent.putExtra(FAV, favorite);
+            // set favorite
+            snippet.setFavorite(favorite);
+            log.append(Boolean.toString(favorite));
+
+
+            // persist to db
+            SnippetViewModel snippetViewModel = ViewModelProviders.of(this).get(SnippetViewModel.class);
+            snippetViewModel.insert(snippet);
+            Log.d(TAG, log.toString());
+
 
             setResult(RESULT_OK, replyIntent);
         }
+
+
+        // wait for db operation to finish
 
         finish();
     }

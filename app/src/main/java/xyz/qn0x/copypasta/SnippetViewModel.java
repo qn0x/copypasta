@@ -70,4 +70,8 @@ public class SnippetViewModel extends AndroidViewModel {
     public long updateFavoriteStatus(long snippetId, boolean favorite) {
         return snippetRepository.updateFavoriteStatus(snippetId, favorite);
     }
+
+    public List<Tag> getTagsForSnippetId(long snippetId) {
+        return snippetRepository.getTagsForSnippetId(snippetId);
+    }
 }

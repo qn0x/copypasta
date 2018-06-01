@@ -28,4 +28,7 @@ public interface TagDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     List<Long> insert(Tag... tagsList);
+
+    @Query("SELECT t.tag FROM tags t JOIN snippetTags st ON t.tag = st.tag WHERE st.snippet_id = :snippetID")
+    List<Tag> getTagsForSnippetId(long snippetID);
 }

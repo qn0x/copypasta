@@ -5,7 +5,6 @@ import android.arch.lifecycle.LiveData;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -15,6 +14,7 @@ import xyz.qn0x.copypasta.persistence.dao.TagDao;
 import xyz.qn0x.copypasta.persistence.entities.Snippet;
 import xyz.qn0x.copypasta.persistence.entities.SnippetTags;
 import xyz.qn0x.copypasta.persistence.entities.Tag;
+import xyz.qn0x.copypasta.ui.activities.MainActivity;
 
 /**
  * Repository for snippets.
@@ -152,6 +152,11 @@ public class SnippetRepository {
             snippetTagsDao.insert(snippetTags);
             return null;
         }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            MainActivity.instance.updateAdapter();
+        }
     }
 
 
@@ -182,5 +187,9 @@ public class SnippetRepository {
     public long updateFavoriteStatus(long snippetId, boolean favorite) {
         Log.d(TAG, "updated favorite to " + favorite + ", id: " + snippetId);
         return snippetDao.updateFavoriteStatus(snippetId, favorite);
+    }
+
+    public List<Tag> getTagsForSnippetId(long snippetId) {
+        return tagDao.getTagsForSnippetId(snippetId);
     }
 }
