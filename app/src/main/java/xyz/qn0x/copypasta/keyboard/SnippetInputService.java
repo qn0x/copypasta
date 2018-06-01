@@ -69,7 +69,8 @@ public class SnippetInputService extends InputMethodService implements KeyboardV
 
     }
 
-    // TODO noch wichtig?
+    // deletes single chars like a "normal" deloete button
+    // TODO würds drin lassen, falls mal einer in einem Schnipsle ein Wort raus haben will und mit einem anderen Schnipsel erstezen will, u know? 
     @Override
     public void onKey(int primaryCode, int[] keyCodes) {
 
