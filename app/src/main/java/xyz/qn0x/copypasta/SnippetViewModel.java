@@ -37,16 +37,8 @@ public class SnippetViewModel extends AndroidViewModel {
         allSnippetTags = snippetRepository.getAllSnippetTags();
     }
 
-    public LiveData<List<SnippetTags>> getAllSnippetTags() {
-        return allSnippetTags;
-    }
-
     public LiveData<List<Snippet>> getAllSnippets() {
         return allSnippets;
-    }
-
-    public LiveData<List<Tag>> getAllTags() {
-        return allTags;
     }
 
     public long insert(Snippet snippet) {
@@ -63,15 +55,20 @@ public class SnippetViewModel extends AndroidViewModel {
         return snippetRepository.getSnippetsByName(sqlQuery);
     }
 
-    public List<Snippet> getAllFavorites() {
-        return snippetRepository.getAllFavorites();
-    }
-
     public long updateFavoriteStatus(long snippetId, boolean favorite) {
         return snippetRepository.updateFavoriteStatus(snippetId, favorite);
     }
 
     public List<Tag> getTagsForSnippetId(long snippetId) {
         return snippetRepository.getTagsForSnippetId(snippetId);
+    }
+
+    public void deleteSnippet(Snippet snippet) {
+        snippetRepository.deleteSnippet(snippet);
+    }
+
+    public Snippet getSnippetForId(long snippetId) {
+        Log.d(TAG, "deleting snippet with id: " + String.valueOf(snippetId));
+        return snippetRepository.getSnippetForId(snippetId);
     }
 }

@@ -26,9 +26,10 @@ public interface TagDao {
             "(SELECT tag FROM snippetTags WHERE snippet_id = :snippetId)")
     LiveData<List<Tag>> getTagsForSnippetId(int snippetId);
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     List<Long> insert(Tag... tagsList);
 
-    @Query("SELECT t.tag FROM tags t JOIN snippetTags st ON t.tag = st.tag WHERE st.snippet_id = :snippetID")
+    @Query("SELECT t.tag FROM tags t JOIN snippetTags st ON t.tag = st.tag " +
+            "WHERE st.snippet_id = :snippetID ORDER BY t.tag ASC")
     List<Tag> getTagsForSnippetId(long snippetID);
 }

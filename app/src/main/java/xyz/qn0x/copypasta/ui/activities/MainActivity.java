@@ -144,9 +144,11 @@ public class MainActivity extends AppCompatActivity {
         snippetViewModel.getAllSnippets().observeForever(snippets -> {
             for (Snippet snippet : snippets) {
                 List<Tag> tags = snippetViewModel.getTagsForSnippetId(snippet.getId());
+
                 StringBuilder sb = new StringBuilder();
                 tags.forEach(tag -> sb.append(tag.getTag()).append(" | "));
                 Log.d(TAG, snippet.getName() + " has the following tags: " + sb.toString());
+
                 snippet.setTags(tags);
             }
 
@@ -239,23 +241,4 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    /**
-     * Prepare pre-population data
-     */
-    private static List<Snippet> initPopData() {
-        List<Snippet> snippetList = new LinkedList<>();
-        for (int i = 1; i < 11; i++) {
-            Snippet s = new Snippet(String.valueOf(i), "This is Snippet Nr. " + i);
-            List<Tag> tags = new LinkedList<>();
-
-            Random rand = new Random();
-
-            int n = rand.nextInt(10000) + 1;
-
-            tags.add(new Tag(String.valueOf(n)));
-            s.setTags(tags);
-            snippetList.add(s);
-        }
-        return snippetList;
-    }
 }

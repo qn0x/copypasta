@@ -31,6 +31,9 @@ public interface SnippetDao {
     @Query("SELECT * FROM snippets WHERE name LIKE :name")
     List<Snippet> getSnippetsByName(String name);
 
+    @Query("SELECT * FROM snippets WHERE id = :snippetId")
+    Snippet getSnippetsForId(long snippetId);
+
     @Query("SELECT * FROM snippets WHERE favorite = 1")
     List<Snippet> getAllFavorites();
 

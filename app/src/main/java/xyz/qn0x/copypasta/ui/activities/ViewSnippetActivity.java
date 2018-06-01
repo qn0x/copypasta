@@ -57,32 +57,38 @@ public class ViewSnippetActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_view_snippet, menu);
-        setABFavorite();
+        updateActionBarFavorite();
 
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        SnippetViewModel snippetViewModel = ViewModelProviders.of(this).get(SnippetViewModel.class);
         switch (item.getItemId()) {
             case R.id.action_view_fav:
-                SnippetViewModel snippetViewModel = ViewModelProviders.of(this).get(SnippetViewModel.class);
                 snippetViewModel.updateFavoriteStatus(snippetId, !favorite);
                 favorite = !favorite;
-                setABFavorite();
+                updateActionBarFavorite();
                 return true;
             case R.id.action_edit:
                 Toast.makeText(getApplicationContext(), "edit clicked", Toast.LENGTH_SHORT).show();
                 return true;
             case R.id.action_delete:
                 Toast.makeText(getApplicationContext(), "delete clicked", Toast.LENGTH_SHORT).show();
+
+                snippetViewModel.deleteSnippet(snippetViewModel.getSnippetForId(snippetId));
+
+                MainActivity.instance.updateAdapter();
+                finish();
                 return true;
             default:
+                Log.wtf(TAG, "you clicked a nonexistent option");
                 return super.onOptionsItemSelected(item);
         }
     }
 
-    private void setABFavorite() {
+    private void updateActionBarFavorite() {
         // set favorite state of the snippet
         Toolbar toolbar = findViewById(R.id.toolbar);
         MenuItem favoriteIcon = toolbar.getMenu().findItem(R.id.action_view_fav);
