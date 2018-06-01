@@ -24,7 +24,6 @@ import com.facebook.stetho.Stetho;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Random;
 
 import xyz.qn0x.copypasta.R;
 import xyz.qn0x.copypasta.SnippetViewModel;
@@ -163,12 +162,28 @@ public class MainActivity extends AppCompatActivity {
             return snippetViewModel.getAllSnippets().getValue();
         }
 
-        List<Snippet> result = snippetViewModel.getSnippetsByName(query);
-        for (Snippet s : result) {
-            Log.d(TAG, "found snippet with id " + s.getId());
+        List<Long> result = new LinkedList<>();
+        if (query.startsWith("#") && query.length() > 1) {
+            Log.d(TAG, "searching for a tag");
+            result = snippetViewModel.getSnippetsByTag(query.substring(1, query.length()));
+        } else if (query.startsWith("@") && query.length() > 1) {
+            Log.d(TAG, "searching for a name");
+            result = snippetViewModel.getSnippetsByName(query.substring(1, query.length()));
+        } else {
+            Log.d(TAG, "searching the full text");
+            result = snippetViewModel.getSnippetsForText(query);
         }
 
-        return result;
+        Log.d(TAG, "result size " + result.size());
+
+        List<Snippet> newList = new LinkedList<>();
+        for (long id : result) {
+            Snippet snippet = snippetViewModel.getSnippetForId(id);
+            snippetViewModel.getTagsForSnippetId(id).forEach(snippet.getTags()::add);
+            newList.add(snippet);
+        }
+
+        return newList;
     }
 
     // draw app bar options

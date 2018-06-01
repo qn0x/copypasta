@@ -49,10 +49,15 @@ public class SnippetViewModel extends AndroidViewModel {
         snippetRepository.insert(tag);
     }
 
-    public List<Snippet> getSnippetsByName(String query) {
+    public List<Long> getSnippetsByName(String query) {
         String sqlQuery = "%" + query + "%";
         Log.d(TAG, "searching database with query: " + sqlQuery);
         return snippetRepository.getSnippetsByName(sqlQuery);
+    }
+
+    public List<Long> getSnippetsByTag(String tag) {
+        String sqlQuery = "%" + tag + "%";
+        return snippetRepository.getSnippetsByTag(sqlQuery);
     }
 
     public long updateFavoriteStatus(long snippetId, boolean favorite) {
@@ -70,5 +75,10 @@ public class SnippetViewModel extends AndroidViewModel {
     public Snippet getSnippetForId(long snippetId) {
         Log.d(TAG, "deleting snippet with id: " + String.valueOf(snippetId));
         return snippetRepository.getSnippetForId(snippetId);
+    }
+
+    public List<Long> getSnippetsForText(String query) {
+        String sqlQuery = "%" + query + "%";
+        return snippetRepository.getSnippetsForText(sqlQuery);
     }
 }

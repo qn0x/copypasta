@@ -178,7 +178,7 @@ public class SnippetRepository {
         return allTags;
     }
 
-    public List<Snippet> getSnippetsByName(String name) {
+    public List<Long> getSnippetsByName(String name) {
         return snippetDao.getSnippetsByName(name);
     }
 
@@ -197,5 +197,13 @@ public class SnippetRepository {
 
     public Snippet getSnippetForId(long snippetId) {
         return snippetDao.getSnippetsForId(snippetId);
+    }
+
+    public List<Long> getSnippetsByTag(String tag) {
+        return snippetDao.getSnippetsByTag(tag);
+    }
+
+    public List<Long> getSnippetsForText(String query) {
+        return snippetDao.getSnippetsForText(query);
     }
 }
