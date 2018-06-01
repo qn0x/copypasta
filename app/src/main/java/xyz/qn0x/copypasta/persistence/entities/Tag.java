@@ -33,4 +33,20 @@ public class Tag {
     public void setTag(@NonNull String tag) {
         this.tag = tag;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null)
+            return false;
+        if (obj == this)
+            return true;
+
+        if (obj instanceof Tag) {
+            Tag t = (Tag) obj;
+            return this.getTag().equalsIgnoreCase(t.getTag());
+        } else {
+            return false;
+        }
+
+    }
 }

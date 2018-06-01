@@ -146,7 +146,7 @@ public class MainActivity extends AppCompatActivity {
 
                 StringBuilder sb = new StringBuilder();
                 tags.forEach(tag -> sb.append(tag.getTag()).append(" | "));
-                Log.d(TAG, snippet.getName() + " has the following tags: " + sb.toString());
+                Log.v(TAG, snippet.getName() + " has the following tags: " + sb.toString());
 
                 snippet.setTags(tags);
             }
@@ -245,11 +245,6 @@ public class MainActivity extends AppCompatActivity {
             case R.id.app_bar_search:
                 Toast.makeText(getApplicationContext(), "search clicked", Toast.LENGTH_SHORT).show();
                 return true;
-
-            case R.id.action_settings:
-                Toast.makeText(getApplicationContext(), "settings clicked", Toast.LENGTH_SHORT).show();
-                return true;
-
             default:
                 Log.wtf(TAG, "Options menu recorded a nonexistent action");
                 return super.onOptionsItemSelected(item);

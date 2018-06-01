@@ -41,6 +41,10 @@ public class SnippetViewModel extends AndroidViewModel {
         return allSnippets;
     }
 
+    public LiveData<List<Tag>> getAllTags() {
+        return allTags;
+    }
+
     public long insert(Snippet snippet) {
         return snippetRepository.insert(snippet);
     }
@@ -80,5 +84,13 @@ public class SnippetViewModel extends AndroidViewModel {
     public List<Long> getSnippetsForText(String query) {
         String sqlQuery = "%" + query + "%";
         return snippetRepository.getSnippetsForText(sqlQuery);
+    }
+
+    public void updateSnippetName(long snippetId, String newName) {
+        snippetRepository.updateSnippetName(snippetId, newName);
+    }
+
+    public void updateSnippetText(long snippetId, String newText) {
+        snippetRepository.updateSnippetText(snippetId, newText);
     }
 }

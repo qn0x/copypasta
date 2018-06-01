@@ -99,14 +99,14 @@ public class NewSnippetActivity extends AppCompatActivity {
             StringBuilder log = new StringBuilder();
 
             // make new snippet
-            String name = snippetNameView.getText().toString();
-            String text = snippetTextView.getText().toString();
+            String name = snippetNameView.getText().toString().trim();
+            String text = snippetTextView.getText().toString().trim();
             Snippet snippet = new Snippet(name, text);
             log.append("NAME: ").append(name).append("\n");
             log.append("TEXT: ").append(text).append("\n");
 
             // parse tags
-            String tags = snippetTagsView.getText().toString();
+            String tags = snippetTagsView.getText().toString().trim();
             ArrayList<String> tagsArray = new ArrayList<>();
             String[] list = tags.split(",");
             Arrays.stream(list).forEach(s -> {

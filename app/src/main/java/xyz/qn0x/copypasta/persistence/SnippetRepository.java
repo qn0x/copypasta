@@ -206,4 +206,12 @@ public class SnippetRepository {
     public List<Long> getSnippetsForText(String query) {
         return snippetDao.getSnippetsForText(query);
     }
+
+    public void updateSnippetName(long snippetId, String newName) {
+        snippetDao.updateSnippetName(snippetId, newName);
+    }
+
+    public void updateSnippetText(long snippetId, String newText) {
+        snippetDao.updateSnippetText(snippetId, newText);
+    }
 }

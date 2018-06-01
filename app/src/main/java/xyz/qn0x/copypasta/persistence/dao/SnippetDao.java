@@ -74,7 +74,6 @@ public interface SnippetDao {
     @Delete
     void deleteSnippet(Snippet snippet);
 
-
     /**
      * update favorite status
      *
@@ -85,6 +84,32 @@ public interface SnippetDao {
     @Query("UPDATE snippets SET favorite = :favorite WHERE id = :snippetId")
     long updateFavoriteStatus(long snippetId, boolean favorite);
 
+    /**
+     * search for the query in all of the snippet texts
+     *
+     * @param query query to search for
+     * @return any found snippet ids
+     */
     @Query("SELECT s.id FROM snippets s WHERE s.text LIKE :query")
     List<Long> getSnippetsForText(String query);
+
+    /**
+     * update a snippet's name
+     *
+     * @param snippetId candidate snippet
+     * @param newName   new name
+     */
+    @Query("UPDATE snippets SET name = :newName WHERE id = :snippetId")
+    void updateSnippetName(long snippetId, String newName);
+
+    /**
+     * update a snippet's text
+     *
+     * @param snippetId candidate snippet
+     * @param newText   new text
+     */
+    @Query("UPDATE snippets SET text = :newText WHERE id = :snippetId")
+    void updateSnippetText(long snippetId, String newText);
 }
+
+

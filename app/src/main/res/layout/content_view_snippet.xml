@@ -5,91 +5,89 @@
     android:id="@+id/linearLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:focusableInTouchMode="true"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".ui.activities.ViewSnippetActivity"
     tools:showIn="@layout/activity_view_snippet">
 
-    <TableLayout
-        android:id="@+id/linearLayout2"
-        android:layout_width="match_parent"
+    <EditText
+        android:id="@+id/view_name"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:padding="10dp"
-        android:gravity="start"
-        android:orientation="horizontal"
+        android:ems="10"
+        android:hint="Name"
+        android:inputType="text|textCapSentences"
+        android:singleLine="true"
+        android:textStyle="bold"
+        android:textColor="@color/text"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent" />
 
-        <TableRow>
-            <TextView
-                android:id="@+id/label_name"
-                android:layout_width="50dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Name:"
-                android:textAlignment="viewStart"
-                android:textAllCaps="false"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/content_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="left"
-                android:text="Name cannot be empty" />
-
-        </TableRow>
-
-        <TableRow>
-            <TextView
-                android:id="@+id/label_tags"
-                android:layout_width="50dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Tags:"
-                android:textAlignment="viewStart"
-                android:textAllCaps="false"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/content_tags"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="left"
-                android:text="Name cannot be empty" />
-
-        </TableRow>
-    </TableLayout>
+    <EditText
+        android:id="@+id/view_tags"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:ems="10"
+        android:hint="Tags (csv, for now)"
+        android:inputType="textPersonName"
+        android:selectAllOnFocus="false"
+        android:singleLine="true"
+        android:textColor="@color/text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/view_name" />
 
     <ScrollView
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_marginBottom="72dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:padding="10dp"
+        android:fillViewport="false"
+        android:paddingBottom="0dp"
+        android:paddingEnd="8dp"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+        android:paddingStart="8dp"
+        android:paddingTop="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout2"
+        app:layout_constraintTop_toBottomOf="@+id/view_tags"
         app:layout_constraintVertical_bias="0.0">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:gravity="top"
             android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/content_text"
+            <EditText
+                android:id="@+id/view_text"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="This snippet is empty" />
+                android:layout_height="match_parent"
+                android:ems="10"
+                android:hint="Snippet"
+                android:inputType="textMultiLine"
+                android:scrollIndicators="right"
+                android:scrollbarAlwaysDrawHorizontalTrack="false"
+                android:scrollbarAlwaysDrawVerticalTrack="true"
+                android:scrollbars="horizontal"
+                android:textColor="@color/text"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.503"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tags"
+                app:layout_constraintVertical_bias="0.0" />
+
         </LinearLayout>
     </ScrollView>
 

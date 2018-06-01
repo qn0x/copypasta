@@ -16,6 +16,7 @@
     <string name="action_edit">Edit</string>
     <string name="action_delete">Delete</string>
     <string name="action_favorite">Favorite</string>
+    <string name="action_edit_save">Save</string>
     <string name="main_search">Search</string>
 
     <string name="search_hint">Names and tags</string>
