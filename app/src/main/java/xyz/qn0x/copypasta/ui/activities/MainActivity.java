@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Random;
 
 import xyz.qn0x.copypasta.R;
 import xyz.qn0x.copypasta.SnippetViewModel;
@@ -54,12 +55,13 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         // database reader for debugging purposes
-        Stetho.initializeWithDefaults(this);
+        //Stetho.initializeWithDefaults(this);
 
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.main_toolbar);
         setSupportActionBar(toolbar);
         toolbar.getVisibility();
+
 
         // set up recycler view
         RecyclerView recyclerView = findViewById(R.id.snippetList);
@@ -98,6 +100,8 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
 
 
+        //initPopData().forEach(snippetViewModel::insert);
+
         // react to touches on the recycler view list
         recyclerView.addOnItemTouchListener(new RecyclerTouchListener(getApplicationContext(), recyclerView,
                 new RecyclerTouchListener.ClickListener() {
@@ -111,7 +115,8 @@ public class MainActivity extends AppCompatActivity {
                             Toast.makeText(getApplicationContext(), snippet.getName() + " is selected! id: " + snippet.getId(),
                                     Toast.LENGTH_SHORT).show();
                             Intent intent = new Intent(MainActivity.this, ViewSnippetActivity.class);
-                            intent.putExtra("ID", snippet.getName());
+                            intent.putExtra("ID", snippet.getId());
+                            intent.putExtra("NAME", snippet.getName());
 
                             StringBuilder sb = new StringBuilder("");
                             if (snippet.getTags() != null || snippet.getTags().size() != 0) {
@@ -245,4 +250,23 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Prepare pre-population data
+     */
+    private static List<Snippet> initPopData() {
+        List<Snippet> snippetList = new LinkedList<>();
+        for (int i = 1; i < 11; i++) {
+            Snippet s = new Snippet(String.valueOf(i), "This is Snippet Nr. " + i);
+            List<Tag> tags = new LinkedList<>();
+
+            Random rand = new Random();
+
+            int n = rand.nextInt(10000) + 1;
+
+            tags.add(new Tag(String.valueOf(n)));
+            s.setTags(tags);
+            snippetList.add(s);
+        }
+        return snippetList;
+    }
 }

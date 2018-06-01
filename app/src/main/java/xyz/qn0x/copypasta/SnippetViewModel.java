@@ -66,4 +66,8 @@ public class SnippetViewModel extends AndroidViewModel {
     public List<Snippet> getAllFavorites() {
         return snippetRepository.getAllFavorites();
     }
+
+    public long updateFavoriteStatus(long snippetId, boolean favorite) {
+        return snippetRepository.updateFavoriteStatus(snippetId, favorite);
+    }
 }

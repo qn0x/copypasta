@@ -178,4 +178,9 @@ public class SnippetRepository {
     public List<Snippet> getAllFavorites() {
         return allFavorites;
     }
+
+    public long updateFavoriteStatus(long snippetId, boolean favorite) {
+        Log.d(TAG, "updated favorite to " + favorite + ", id: " + snippetId);
+        return snippetDao.updateFavoriteStatus(snippetId, favorite);
+    }
 }

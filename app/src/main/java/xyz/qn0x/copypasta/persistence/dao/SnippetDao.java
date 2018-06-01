@@ -6,6 +6,7 @@ import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.OnConflictStrategy;
 import android.arch.persistence.room.Query;
+import android.arch.persistence.room.Update;
 
 import java.util.List;
 
@@ -35,4 +36,7 @@ public interface SnippetDao {
 
     @Delete
     void deleteSnippet(Snippet snippet);
+
+    @Query("UPDATE snippets SET favorite = :favorite WHERE id = :snippetId")
+    long updateFavoriteStatus(long snippetId, boolean favorite);
 }

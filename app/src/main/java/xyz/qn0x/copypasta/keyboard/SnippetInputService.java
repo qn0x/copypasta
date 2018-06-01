@@ -7,7 +7,9 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputConnection;
+import android.widget.Toast;
 
 import java.util.List;
 
@@ -27,17 +29,46 @@ public class SnippetInputService extends InputMethodService implements KeyboardV
 
     @Override
     public View onCreateInputView() {
-
-        KeyboardView keyboardView = (KeyboardView) getLayoutInflater().inflate(R.layout.keyboard_view, null);
-        Keyboard keyboard = new Keyboard(this, R.xml.keyboard);
-        keyboardView.setPreviewEnabled(false);
-
-
         // pull favorites from the db
         SnippetDatabase db = SnippetDatabase.getDatabase(getApplicationContext());
         SnippetDao snippetDao = db.snippetDao();
         favorites = snippetDao.getAllFavorites();
         Log.d(TAG, "loaded " + favorites.size() + " favorites from the database");
+
+        // calculate the amount of needed rows
+        int rows = favorites.size() / 4;
+        if (favorites.size() % 4 != 0) {
+            rows++;
+        }
+
+        Log.d(TAG, rows + " needed for the keyboard");
+
+        KeyboardView keyboardView = (KeyboardView) getLayoutInflater().inflate(R.layout.keyboard_view, null);
+
+
+        Keyboard keyboard;
+        switch (rows) {
+            case 1:
+                keyboard = new Keyboard(this, R.xml.keyboard, R.integer.rows_1);
+                break;
+            case 2:
+                keyboard = new Keyboard(this, R.xml.keyboard, R.integer.rows_2);
+                break;
+            case 3:
+                keyboard = new Keyboard(this, R.xml.keyboard, R.integer.rows_3);
+                break;
+            case 4:
+                keyboard = new Keyboard(this, R.xml.keyboard, R.integer.rows_4);
+                break;
+            case 0:
+            default:
+                Toast.makeText(getApplicationContext(), "No favorites defined", Toast.LENGTH_SHORT).show();
+                keyboard = new Keyboard(this, R.xml.keyboard);
+                break;
+        }
+
+
+        keyboardView.setPreviewEnabled(false);
 
         List<Keyboard.Key> keys = keyboard.getKeys();
 
@@ -52,7 +83,6 @@ public class SnippetInputService extends InputMethodService implements KeyboardV
 
         return keyboardView;
     }
-
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
@@ -119,6 +149,7 @@ public class SnippetInputService extends InputMethodService implements KeyboardV
     public void swipeLeft() {
         InputConnection inputConnection = getCurrentInputConnection();
         if (inputConnection != null) {
+            Log.d(TAG, "swipe left, deleting " + lastInputlength + " characters");
             inputConnection.deleteSurroundingText(lastInputlength, 0);
         }
     }
@@ -136,6 +167,16 @@ public class SnippetInputService extends InputMethodService implements KeyboardV
     @Override
     public void swipeUp() {
 
+    }
+
+    @Override
+    public void onStartInputView(EditorInfo info, boolean restarting) {
+        setInputView(onCreateInputView());
+    }
+
+    @Override
+    public void onFinishInputView(boolean finishingInput) {
+        Log.d(TAG, "onFinishInputView");
     }
 }
 
