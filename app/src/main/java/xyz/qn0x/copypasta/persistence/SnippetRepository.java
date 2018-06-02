@@ -31,13 +31,9 @@ public class SnippetRepository {
     private TagDao tagDao;
     private SnippetTagsDao snippetTagsDao;
 
-    public static SnippetRepository snippetRepository;
-
     // containers that hold the state of the db content in the application
     private LiveData<List<Snippet>> allSnippets;
     private List<Tag> allTags;
-    private LiveData<List<SnippetTags>> allSnippetTags;
-
 
     public SnippetRepository(Application application) {
         SnippetDatabase db = SnippetDatabase.getDatabase(application);
@@ -46,9 +42,6 @@ public class SnippetRepository {
         snippetTagsDao = db.snippetTagsDao();
         allTags = tagDao.getAllTags();
         allSnippets = snippetDao.getAllSnippets();
-        allSnippetTags = snippetTagsDao.getAllSnippetTags();
-
-        snippetRepository = this;
     }
 
     /**
@@ -75,7 +68,7 @@ public class SnippetRepository {
 
 
     // ----------------------------------------------------------------------------
-    // the following classes make sure data is inserted outside of UI thread
+    // async tasks
     // ----------------------------------------------------------------------------
 
     private static class insertSnippetTask extends AsyncTask<Snippet, Void, Long> {
@@ -162,10 +155,6 @@ public class SnippetRepository {
     // repository content holders
     // -----------------------------------------------------------------------------------------
 
-    public LiveData<List<SnippetTags>> getAllSnippetTags() {
-        return allSnippetTags;
-    }
-
     public LiveData<List<Snippet>> getAllSnippets() {
         return allSnippets;
     }
@@ -174,21 +163,14 @@ public class SnippetRepository {
         return allTags;
     }
 
+
+    // -------- queries ---------------
     public List<Long> getSnippetsByName(String name) {
         return snippetDao.getSnippetsByName(name);
     }
 
-    public long updateFavoriteStatus(long snippetId, boolean favorite) {
-        Log.d(TAG, "updated favorite to " + favorite + ", id: " + snippetId);
-        return snippetDao.updateFavoriteStatus(snippetId, favorite);
-    }
-
     public List<Tag> getTagsForSnippetId(long snippetId) {
         return tagDao.getTagsForSnippetId(snippetId);
-    }
-
-    public void deleteSnippet(Snippet snippet) {
-        snippetDao.deleteSnippet(snippet);
     }
 
     public Snippet getSnippetForId(long snippetId) {
@@ -203,6 +185,12 @@ public class SnippetRepository {
         return snippetDao.getSnippetsForText(query);
     }
 
+    // -------- update ----------------
+    public long updateFavoriteStatus(long snippetId, boolean favorite) {
+        Log.d(TAG, "updated favorite to " + favorite + ", id: " + snippetId);
+        return snippetDao.updateFavoriteStatus(snippetId, favorite);
+    }
+
     public void updateSnippetName(long snippetId, String newName) {
         snippetDao.updateSnippetName(snippetId, newName);
     }
@@ -211,24 +199,25 @@ public class SnippetRepository {
         snippetDao.updateSnippetText(snippetId, newText);
     }
 
+    // -------- delete ----------------
+    public void deleteSnippet(Snippet snippet) {
+        snippetDao.deleteSnippet(snippet);
+    }
+
     public void deleteSnippetTagsForSnippetId(long snippetId) {
         snippetTagsDao.deleteSnippetTagsForSnippetId(snippetId);
     }
 
-    public void deleteForTag(Tag tag) {
-        snippetTagsDao.deleteForTag(tag);
-    }
-
-    public void update(SnippetTags... snippetTags) {
-        snippetTagsDao.update(snippetTags);
-    }
-
-    public void insert(SnippetTags... snippetTags) {
-        snippetTagsDao.insert(snippetTags);
-    }
 
     public void deleteStrayTags() {
         snippetTagsDao.deleteStrayTags();
+    }
+
+
+    // -------- insert ----------------
+
+    public void insert(SnippetTags... snippetTags) {
+        snippetTagsDao.insert(snippetTags);
     }
 
 }

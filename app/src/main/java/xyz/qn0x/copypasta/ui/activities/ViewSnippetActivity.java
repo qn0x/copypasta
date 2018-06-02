@@ -11,7 +11,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import java.util.Arrays;
 import java.util.LinkedList;
@@ -114,7 +113,7 @@ public class ViewSnippetActivity extends AppCompatActivity {
                 return true;
 
             case R.id.action_delete:
-                Toast.makeText(getApplicationContext(), "delete clicked", Toast.LENGTH_SHORT).show();
+                Log.d(TAG, "deleting snippet with id " + String.valueOf(snippetId));
 
                 snippetViewModel.deleteSnippet(snippetViewModel.getSnippetForId(snippetId));
                 snippetViewModel.deleteStrayTags();
@@ -136,6 +135,9 @@ public class ViewSnippetActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * updates the snippet in the db
+     */
     private void updateSnippet() {
         SnippetViewModel snippetViewModel = ViewModelProviders.of(this).get(SnippetViewModel.class);
         // look for changes and save them if present
@@ -214,6 +216,10 @@ public class ViewSnippetActivity extends AppCompatActivity {
         }
     }
 
+
+    /**
+     * sets the app bar icon according to the favorite status
+     */
     private void updateActionBarFavorite() {
         // set favorite state of the snippet
         Toolbar toolbar = findViewById(R.id.toolbar);

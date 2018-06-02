@@ -10,7 +10,11 @@ import android.support.annotation.NonNull;
 import java.util.LinkedList;
 import java.util.List;
 
-
+/**
+ * Represents a snippet.
+ * <p>
+ * Snippets contain a name, a text, their favorite status and a list of tags
+ */
 @Entity(tableName = "snippets",
         indices = {@Index(value = {"name", "text"}, unique = true)})
 public class Snippet {
@@ -19,13 +23,13 @@ public class Snippet {
     private long id;
 
     @ColumnInfo(name = "name")
-    private String name = "";
+    private String name;
 
     @ColumnInfo(name = "text")
-    private String text = "";
+    private String text;
 
     @ColumnInfo(name = "favorite")
-    private boolean favorite = false;
+    private boolean favorite;
 
     @Ignore
     private List<Tag> tags;

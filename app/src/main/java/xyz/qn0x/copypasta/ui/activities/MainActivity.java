@@ -56,11 +56,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         instance = this;
 
-        // database reader for debugging purposes
-        Stetho.initializeWithDefaults(this);
 
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.main_toolbar);
@@ -84,12 +81,10 @@ public class MainActivity extends AppCompatActivity {
             startActivityForResult(intent, NEW_SNIPPET_ACTIVITY_REQUEST_CODE);
         });
 
+        // initialize recycler view
         updateAdapter();
-
         recyclerView.setAdapter(adapter);
 
-
-        //initPopData().forEach(snippetViewModel::insert);
 
         // react to touches on the recycler view list
         recyclerView.addOnItemTouchListener(new RecyclerTouchListener(getApplicationContext(), recyclerView,
@@ -100,9 +95,9 @@ public class MainActivity extends AppCompatActivity {
                             Toast.makeText(getApplicationContext(), "position is null",
                                     Toast.LENGTH_SHORT).show();
                         } else {
+                            // set up the ViewSnippetActivity and call it
                             Snippet snippet = adapter.getSnippetList().get(position);
-                            Toast.makeText(getApplicationContext(), snippet.getName() + " is selected! id: " + snippet.getId(),
-                                    Toast.LENGTH_SHORT).show();
+
                             Intent intent = new Intent(MainActivity.this, ViewSnippetActivity.class);
                             intent.putExtra("ID", snippet.getId());
                             intent.putExtra("NAME", snippet.getName());
@@ -114,7 +109,6 @@ public class MainActivity extends AppCompatActivity {
                                     sb.deleteCharAt(sb.length() - 1);
                             }
                             intent.putExtra("TAGS", sb.toString());
-
                             intent.putExtra("TEXT", snippet.getText());
                             intent.putExtra("FAV", snippet.isFavorite());
                             Log.d(TAG, "view snippet ID: " + snippet.getId() + " FAV: " + snippet.isFavorite() + "Tags: " + sb.toString());
@@ -124,7 +118,6 @@ public class MainActivity extends AppCompatActivity {
 
                     @Override
                     public void onLongClick(View view, int position) {
-                        Snackbar.make(view, "long click detected", Snackbar.LENGTH_LONG);
                     }
                 }));
     }
@@ -134,10 +127,14 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
     }
 
+    /**
+     * triggers a refresh of the adapter that feeds the recycler view where the list of all snippets is stored
+     */
     public void updateAdapter() {
         Log.d(TAG, "updating adapter");
         // instantiate ViewModel
         snippetViewModel = ViewModelProviders.of(this).get(SnippetViewModel.class);
+
         // ensure the recycler view stays updated with the current db state
         liveSnippets = snippetViewModel.getAllSnippets();
         snippetViewModel.getAllSnippets().observeForever(snippets -> {
@@ -150,32 +147,44 @@ public class MainActivity extends AppCompatActivity {
 
                 snippet.setTags(tags);
             }
-
-
             adapter.setSnippets(snippets);
         });
     }
 
+    /**
+     * Search implementation.
+     * <p>
+     * If the search query starts with @ names are search. If the query starts with # tags are searched. Otherwise a
+     * full snippet text search will be performed.
+     *
+     * @param query query to search for
+     * @return list of matching snippets
+     */
     private List<Snippet> doSearch(String query) {
         if (query.equalsIgnoreCase("")) {
             Log.d(TAG, "no search query, returning all snippets");
             return snippetViewModel.getAllSnippets().getValue();
         }
 
-        List<Long> result = new LinkedList<>();
+        // snippet ids
+        List<Long> result;
         if (query.startsWith("#") && query.length() > 1) {
+            // search for tags
             Log.d(TAG, "searching for a tag");
             result = snippetViewModel.getSnippetsByTag(query.substring(1, query.length()));
         } else if (query.startsWith("@") && query.length() > 1) {
+            // search for names
             Log.d(TAG, "searching for a name");
             result = snippetViewModel.getSnippetsByName(query.substring(1, query.length()));
         } else {
+            // search for search full text
             Log.d(TAG, "searching the full text");
             result = snippetViewModel.getSnippetsForText(query);
         }
 
         Log.d(TAG, "result size " + result.size());
 
+        // match snippet ids with snippet objects
         List<Snippet> newList = new LinkedList<>();
         for (long id : result) {
             Snippet snippet = snippetViewModel.getSnippetForId(id);
@@ -193,7 +202,6 @@ public class MainActivity extends AppCompatActivity {
         inflater.inflate(R.menu.menu_main, menu);
 
         // set up search
-        // TODO suche nach text und suche nach tags
         final SearchView searchView = (SearchView) menu.findItem(R.id.app_bar_search).getActionView();
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override

@@ -14,6 +14,7 @@ import xyz.qn0x.copypasta.persistence.entities.Tag;
 
 /**
  * This class represents the ViewModel for the main activity.
+ * And apparently every other activity. This needs refactoring.
  *
  * @author Janine Kostka
  */
@@ -27,16 +28,15 @@ public class SnippetViewModel extends AndroidViewModel {
     // containers that hold the state of the data
     private LiveData<List<Snippet>> allSnippets;
     private List<Tag> allTags;
-    private LiveData<List<SnippetTags>> allSnippetTags;
 
     public SnippetViewModel(Application application) {
         super(application);
         snippetRepository = new SnippetRepository(application);
         allSnippets = snippetRepository.getAllSnippets();
         allTags = snippetRepository.getAllTags();
-        allSnippetTags = snippetRepository.getAllSnippetTags();
     }
 
+    // --------- LiveData ----------
     public LiveData<List<Snippet>> getAllSnippets() {
         return allSnippets;
     }
@@ -45,6 +45,8 @@ public class SnippetViewModel extends AndroidViewModel {
         return allTags;
     }
 
+
+    // --------- insert --------------
     public long insert(Snippet snippet) {
         return snippetRepository.insert(snippet);
     }
@@ -53,6 +55,40 @@ public class SnippetViewModel extends AndroidViewModel {
         snippetRepository.insert(tag);
     }
 
+    public void insert(SnippetTags... snippetTags) {
+        snippetRepository.insert(snippetTags);
+    }
+
+
+    // --------- update --------------
+    public long updateFavoriteStatus(long snippetId, boolean favorite) {
+        return snippetRepository.updateFavoriteStatus(snippetId, favorite);
+    }
+
+    public void updateSnippetName(long snippetId, String newName) {
+        snippetRepository.updateSnippetName(snippetId, newName);
+    }
+
+    public void updateSnippetText(long snippetId, String newText) {
+        snippetRepository.updateSnippetText(snippetId, newText);
+    }
+
+
+    // --------- delete --------------
+    public void deleteSnippet(Snippet snippet) {
+        snippetRepository.deleteSnippet(snippet);
+    }
+
+    public void deleteSnippetTagsForSnippetId(long snippetId) {
+        snippetRepository.deleteSnippetTagsForSnippetId(snippetId);
+    }
+
+    public void deleteStrayTags() {
+        snippetRepository.deleteStrayTags();
+    }
+
+
+    // --------- queries --------------
     public List<Long> getSnippetsByName(String query) {
         String sqlQuery = "%" + query + "%";
         Log.d(TAG, "searching database with query: " + sqlQuery);
@@ -64,16 +100,8 @@ public class SnippetViewModel extends AndroidViewModel {
         return snippetRepository.getSnippetsByTag(sqlQuery);
     }
 
-    public long updateFavoriteStatus(long snippetId, boolean favorite) {
-        return snippetRepository.updateFavoriteStatus(snippetId, favorite);
-    }
-
     public List<Tag> getTagsForSnippetId(long snippetId) {
         return snippetRepository.getTagsForSnippetId(snippetId);
-    }
-
-    public void deleteSnippet(Snippet snippet) {
-        snippetRepository.deleteSnippet(snippet);
     }
 
     public Snippet getSnippetForId(long snippetId) {
@@ -86,31 +114,4 @@ public class SnippetViewModel extends AndroidViewModel {
         return snippetRepository.getSnippetsForText(sqlQuery);
     }
 
-    public void updateSnippetName(long snippetId, String newName) {
-        snippetRepository.updateSnippetName(snippetId, newName);
-    }
-
-    public void updateSnippetText(long snippetId, String newText) {
-        snippetRepository.updateSnippetText(snippetId, newText);
-    }
-
-    public void deleteSnippetTagsForSnippetId(long snippetId) {
-        snippetRepository.deleteSnippetTagsForSnippetId(snippetId);
-    }
-
-    public void deleteForTag(Tag tag) {
-        snippetRepository.deleteForTag(tag);
-    }
-
-    public void update(SnippetTags... snippetTags) {
-        snippetRepository.update(snippetTags);
-    }
-
-    public void insert(SnippetTags... snippetTags) {
-        snippetRepository.insert(snippetTags);
-    }
-
-    public void deleteStrayTags() {
-        snippetRepository.deleteStrayTags();
-    }
 }

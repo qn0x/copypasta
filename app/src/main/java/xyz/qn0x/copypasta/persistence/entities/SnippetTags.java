@@ -3,8 +3,6 @@ package xyz.qn0x.copypasta.persistence.entities;
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.ForeignKey;
-import android.arch.persistence.room.PrimaryKey;
-import android.arch.persistence.room.TypeConverter;
 import android.support.annotation.NonNull;
 
 /**
@@ -21,7 +19,6 @@ import android.support.annotation.NonNull;
 public class SnippetTags {
 
     @ColumnInfo(name = "snippet_id")
-    @NonNull
     private long snippet_id;
 
     @ColumnInfo(name = "tag")
@@ -37,15 +34,12 @@ public class SnippetTags {
         return snippet_id;
     }
 
+    @NonNull
     public Tag getTag() {
         return tag;
     }
 
-    public void setSnippet_id(long snippet_id) {
-        this.snippet_id = snippet_id;
-    }
-
-    public void setTag(Tag tag) {
+    public void setTag(@NonNull Tag tag) {
         this.tag = tag;
     }
 

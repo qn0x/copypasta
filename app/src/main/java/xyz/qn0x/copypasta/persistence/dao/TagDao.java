@@ -1,6 +1,5 @@
 package xyz.qn0x.copypasta.persistence.dao;
 
-import android.arch.lifecycle.LiveData;
 import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.OnConflictStrategy;
@@ -15,16 +14,6 @@ public interface TagDao {
 
     @Query("SELECT tag FROM tags ORDER BY tag ASC")
     List<Tag> getAllTags();
-
-    @Query("SELECT * FROM tags WHERE tag = :tagName")
-    LiveData<List<Tag>> getTagByTagName(String tagName);
-
-    @Query("SELECT * FROM tags WHERE tag = :tagId")
-    LiveData<Tag> getTagById(int tagId);
-
-    @Query("SELECT * FROM tags WHERE tags.tag IN " +
-            "(SELECT tag FROM snippetTags WHERE snippet_id = :snippetId)")
-    LiveData<List<Tag>> getTagsForSnippetId(int snippetId);
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     List<Long> insert(Tag... tagsList);

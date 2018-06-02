@@ -11,6 +11,10 @@ import java.util.List;
 
 import xyz.qn0x.copypasta.persistence.entities.Snippet;
 
+
+/**
+ * @author Janine Kostka
+ */
 @Dao
 public interface SnippetDao {
 

@@ -14,7 +14,7 @@ import xyz.qn0x.copypasta.R;
 import xyz.qn0x.copypasta.persistence.entities.Snippet;
 
 /**
- * Created by qn0x on 18/04/19.
+ * holds the data that is displayed in the recycler view
  */
 
 public class SnippetAdapter extends RecyclerView.Adapter<SnippetAdapter.SnippetViewHolder> {
