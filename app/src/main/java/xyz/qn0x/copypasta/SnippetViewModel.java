@@ -26,7 +26,7 @@ public class SnippetViewModel extends AndroidViewModel {
 
     // containers that hold the state of the data
     private LiveData<List<Snippet>> allSnippets;
-    private LiveData<List<Tag>> allTags;
+    private List<Tag> allTags;
     private LiveData<List<SnippetTags>> allSnippetTags;
 
     public SnippetViewModel(Application application) {
@@ -41,7 +41,7 @@ public class SnippetViewModel extends AndroidViewModel {
         return allSnippets;
     }
 
-    public LiveData<List<Tag>> getAllTags() {
+    public List<Tag> getAllTags() {
         return allTags;
     }
 
@@ -92,5 +92,25 @@ public class SnippetViewModel extends AndroidViewModel {
 
     public void updateSnippetText(long snippetId, String newText) {
         snippetRepository.updateSnippetText(snippetId, newText);
+    }
+
+    public void deleteSnippetTagsForSnippetId(long snippetId) {
+        snippetRepository.deleteSnippetTagsForSnippetId(snippetId);
+    }
+
+    public void deleteForTag(Tag tag) {
+        snippetRepository.deleteForTag(tag);
+    }
+
+    public void update(SnippetTags... snippetTags) {
+        snippetRepository.update(snippetTags);
+    }
+
+    public void insert(SnippetTags... snippetTags) {
+        snippetRepository.insert(snippetTags);
+    }
+
+    public void deleteStrayTags() {
+        snippetRepository.deleteStrayTags();
     }
 }

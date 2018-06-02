@@ -21,6 +21,7 @@ import android.support.annotation.NonNull;
 public class SnippetTags {
 
     @ColumnInfo(name = "snippet_id")
+    @NonNull
     private long snippet_id;
 
     @ColumnInfo(name = "tag")

@@ -110,7 +110,7 @@ public class NewSnippetActivity extends AppCompatActivity {
             ArrayList<String> tagsArray = new ArrayList<>();
             String[] list = tags.split(",");
             Arrays.stream(list).forEach(s -> {
-                tagsArray.add(s.trim());
+                tagsArray.add(s.trim().toLowerCase());
                 log.append(s);
                 log.append(" + ");
             });

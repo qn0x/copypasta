@@ -1,6 +1,5 @@
 package xyz.qn0x.copypasta.ui.activities;
 
-import android.app.Activity;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,17 +10,17 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import xyz.qn0x.copypasta.R;
 import xyz.qn0x.copypasta.SnippetViewModel;
+import xyz.qn0x.copypasta.persistence.entities.SnippetTags;
 import xyz.qn0x.copypasta.persistence.entities.Tag;
 
 public class ViewSnippetActivity extends AppCompatActivity {
@@ -118,6 +117,7 @@ public class ViewSnippetActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), "delete clicked", Toast.LENGTH_SHORT).show();
 
                 snippetViewModel.deleteSnippet(snippetViewModel.getSnippetForId(snippetId));
+                snippetViewModel.deleteStrayTags();
                 MainActivity.instance.updateAdapter();
                 finish();
                 return true;
@@ -152,37 +152,66 @@ public class ViewSnippetActivity extends AppCompatActivity {
             snippetViewModel.updateSnippetText(snippetId, vText.getText().toString().trim());
         }
 
-        /*// save new tags
+        // save new tags
         if (!vTags.getText().toString().trim().equalsIgnoreCase(oldTags.trim())) {
+            // parse tags from text
             Log.d(TAG, "tags have changed");
             List<String> tagsList = Arrays.asList(vTags.getText().toString().split(","));
-            List<Tag> tags = new LinkedList<>();
-            tagsList.forEach(s -> tags.add(new Tag(s)));
+            for (int i = 0; i < tagsList.size(); i++) {
+                tagsList.set(i, tagsList.get(i).trim().toLowerCase());
+            }
+            List<String> filteredList = tagsList.stream().distinct().collect(Collectors.toList());
 
-            List<Tag> allTags = snippetViewModel.getAllTags().getValue();
+            List<Tag> tagsToSort = new LinkedList<>();
+            filteredList.forEach(s -> tagsToSort.add(new Tag(s)));
+
+            // delete all tag associations of this snippet
+            snippetViewModel.deleteSnippetTagsForSnippetId(snippetId);
+
+
+            // sort tags into 2 lists: newTags, inDb
+            List<Tag> allTags = snippetViewModel.getAllTags();
             Log.v(TAG, "number of stored tags: " + allTags.size());
+            Log.v(TAG, "snippet now has " + tagsToSort.size() + " tags");
 
             List<Tag> newTags = new LinkedList<>();
+            List<Tag> existingTags = new LinkedList<>();
 
-            for (Tag t : tags) {
+            for (int i = 0; i < tagsToSort.size(); i++) {
+                Tag t = tagsToSort.get(i);
                 if (!allTags.contains(t))
                     newTags.add(t);
                 if (allTags.contains(t))
-                    tags.remove(t);
+                    existingTags.add(t);
             }
 
-            Log.v(TAG, "old tags: ");
-            tags.forEach(tag -> Log.v(TAG, tag.getTag()));
+            Log.v(TAG, "existing tags: ");
+            if (existingTags.size() != 0) {
+                for (Tag t : existingTags) {
+                    Log.v(TAG, t.getTag());
+                }
+            }
 
             Log.v(TAG, "new tags: ");
-            newTags.forEach(tag -> Log.v(TAG, tag.getTag()));
+            if (newTags.size() != 0) {
+                for (Tag t : newTags) {
+                    Log.v(TAG, t.getTag());
+                }
+            }
 
+            // insert any new tags
+            if (newTags.size() >= 0)
+                newTags.forEach(snippetViewModel::insert);
 
-            // tag is new
+            // insert all SnippetTags entries
+            List<SnippetTags> snippetTags = new LinkedList<>();
+            tagsToSort.forEach(tag -> snippetTags.add(new SnippetTags(snippetId, tag)));
+            SnippetTags[] insert = new SnippetTags[snippetTags.size()];
+            snippetViewModel.insert(snippetTags.toArray(insert));
 
-
-            // tag is in db
-        }*/
+            // delete any stray tags with no entry in SnippetTags
+            snippetViewModel.deleteStrayTags();
+        }
     }
 
     private void updateActionBarFavorite() {

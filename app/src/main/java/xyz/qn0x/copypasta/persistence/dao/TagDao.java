@@ -13,8 +13,8 @@ import xyz.qn0x.copypasta.persistence.entities.Tag;
 @Dao
 public interface TagDao {
 
-    @Query("SELECT * FROM tags ORDER BY tag ASC")
-    LiveData<List<Tag>> getAllTags();
+    @Query("SELECT tag FROM tags ORDER BY tag ASC")
+    List<Tag> getAllTags();
 
     @Query("SELECT * FROM tags WHERE tag = :tagName")
     LiveData<List<Tag>> getTagByTagName(String tagName);

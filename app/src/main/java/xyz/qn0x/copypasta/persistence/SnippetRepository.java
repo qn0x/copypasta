@@ -35,7 +35,7 @@ public class SnippetRepository {
 
     // containers that hold the state of the db content in the application
     private LiveData<List<Snippet>> allSnippets;
-    private LiveData<List<Tag>> allTags;
+    private List<Tag> allTags;
     private LiveData<List<SnippetTags>> allSnippetTags;
 
 
@@ -70,7 +70,7 @@ public class SnippetRepository {
      * @param tags tag to insert
      */
     public void insert(Tag... tags) {
-        new insertTagsTask(tagDao).execute(tags);
+        tagDao.insert(tags);
     }
 
 
@@ -114,10 +114,6 @@ public class SnippetRepository {
         private TagDao tagsDao;
         private Snippet snippet;
         private SnippetTagsDao snippetTagsDao;
-
-        insertTagsTask(TagDao dao) {
-            tagsDao = dao;
-        }
 
         insertTagsTask(TagDao dao, SnippetTagsDao snippetTagsDao, Snippet snippet) {
             tagsDao = dao;
@@ -174,7 +170,7 @@ public class SnippetRepository {
         return allSnippets;
     }
 
-    public LiveData<List<Tag>> getAllTags() {
+    public List<Tag> getAllTags() {
         return allTags;
     }
 
@@ -214,4 +210,25 @@ public class SnippetRepository {
     public void updateSnippetText(long snippetId, String newText) {
         snippetDao.updateSnippetText(snippetId, newText);
     }
+
+    public void deleteSnippetTagsForSnippetId(long snippetId) {
+        snippetTagsDao.deleteSnippetTagsForSnippetId(snippetId);
+    }
+
+    public void deleteForTag(Tag tag) {
+        snippetTagsDao.deleteForTag(tag);
+    }
+
+    public void update(SnippetTags... snippetTags) {
+        snippetTagsDao.update(snippetTags);
+    }
+
+    public void insert(SnippetTags... snippetTags) {
+        snippetTagsDao.insert(snippetTags);
+    }
+
+    public void deleteStrayTags() {
+        snippetTagsDao.deleteStrayTags();
+    }
+
 }
