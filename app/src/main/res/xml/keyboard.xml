@@ -37,7 +37,8 @@
             android:keyEdgeFlags="right"
             android:keyLabel=" "
             android:keyOutputText=" " />
-    </Row><Row android:keyboardMode="@integer/rows_2">
+    </Row>
+    <Row android:keyboardMode="@integer/rows_2">
         <Key
             android:keyEdgeFlags="left"
             android:keyLabel="Row 2"
@@ -85,7 +86,8 @@
             android:keyEdgeFlags="right"
             android:keyLabel=" "
             android:keyOutputText=" " />
-    </Row><Row android:keyboardMode="@integer/rows_3">
+    </Row>
+    <Row android:keyboardMode="@integer/rows_3">
         <Key
             android:keyEdgeFlags="left"
             android:keyLabel="Row 3"
