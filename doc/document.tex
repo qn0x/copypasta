@@ -10,7 +10,10 @@
 
 \usepackage[normalem]{ulem}
 \usepackage{listings}
+
 \usepackage{xcolor}
+\definecolor{light-gray}{gray}{0.9}
+
 \usepackage{graphicx}
 \usepackage{subcaption}
 
@@ -19,10 +22,10 @@
 \usepackage{enumitem}
 
 \newlist{FA}{enumerate}{1}
-\setlist[FA]{label=FA-\arabic*:,leftmargin=*, align=left, labelindent=0.6cm}
+\setlist[FA]{label=\textsf{FA-\arabic*},leftmargin=*, align=left, labelindent=0.6cm}
 
 \newlist{NFA}{enumerate}{1}
-\setlist[NFA]{label=NFA-\arabic*:,leftmargin=*, align=left, labelindent=0.6cm}
+\setlist[NFA]{label=NFA-\arabic*,leftmargin=*, align=left, labelindent=0.6cm}
 
 
 %% ER Diagramm
@@ -64,7 +67,8 @@
 	\begin{itemize}
 		\item Deckblatt bisschen verschönern
 		\item Einleitung schreiben
-		\item Code listings etwas besser aussehen lassen (listings-Package konfigurieren)
+		\item Ausblick schreiben
+		\item \sout{Code listings etwas besser aussehen lassen (listings-Package konfigurieren)}
 	\end{itemize}
 
 \section*{Anmerkungen (braucht ne bessere Überschrift)}
@@ -86,37 +90,37 @@
 	\subsection{Funktionale Anforderungen}
 		\subsubsection{App}
 		\begin{FA}
-			\item Die Textschnipsel bestehen jeweils aus Text, Name bzw. Titel des Schnipsels und einer Liste von Tags.
-			\item Alle vorhandenen Textschnipsel werden als Liste innerhalb der MainActivity angezeigt.
-			\item Der Benutzer soll eigene Textschnipsel abspeichern, löschen und verändern können.
-			\item Der Benutzer kann nach Textschnipseln suchen. Dabei soll die Suchfunktion folgende Methoden unterstützen:
+			\item \label{fa:1} Die Textschnipsel bestehen jeweils aus Text, Name bzw. Titel des Schnipsels und einer Liste von Tags.
+			\item \label{fa:2} Alle vorhandenen Textschnipsel werden als Liste innerhalb der MainActivity angezeigt, um eine schnelle Übersicht zu bekommen.
+			\item \label{fa:3} Der Benutzer soll eigene Textschnipsel abspeichern, löschen und verändern können.
+			\item \label{fa:4} Der Benutzer kann nach Textschnipseln suchen. Dabei soll die Suchfunktion folgende Methoden unterstützen:
 				\begin{enumerate}
 					\item Volltextsuche. Dabei sollen die abgespeicherten Texte nach den im Suchfeld eingegebenen Text durchsucht werden.
 					\item Tagsuche. Mit Setzen eines '\#' zu Beginn der Sucheingabe soll nach vorhandenen Tags gesucht werden.
 					\item Titelsuche. Mit Setzen eines '@' zu Beginn der Sucheingabe soll nach vorhandenen Titeln gesucht werden
 				\end{enumerate}
-			\item Der Benutzer soll zur Laufzeit der App selbst festlegen können welche Textschnipsel auf der Tastatur angezeigt werden. 
+			\item \label{fa:5} Der Benutzer soll zur Laufzeit der App selbst festlegen können welche Textschnipsel auf der Tastatur angezeigt werden. Dies soll über eine Favoritenfunktion umgesetzt werden. Ein als Favorit markierter Textschnipsel wird auf der Tastatur dargestellt.
 		\end{FA}
 		
 		\subsubsection{Tastatur}
 		\begin{FA}[resume]
-			\item Die Tastatur soll als Anzeige von als Favorit markierten Textschnipseln dienen. Diese werden in Form von Buttons dargestellt.
-			\item Die Anzeige der Textschnipsel soll mittels deren Namen bzw. Titel als Label auf Buttons erfolgen.
-			\item Änderungen des Favoritenstatus innerhalb der App sollen zur Laufzeit beim nächsten Sichtbarwerden der Tastatur widergespiegelt werden.
-			\item Beim Tippen auf einen Button auf der Tastatur soll der Inhalt des auf dem Button angezeigten Textschnipsels in das aktive Eingabefeld eingefügt werden.
-			\item Mit einem Swipe Left soll der zuletzt eingefügte Text wieder gelöscht werden.
-			\item Es sollen pro Zeile der Tastatur genau vier Buttons dargestellt werden. 
-			\item Die Anzahl der Zeilen ist auf maximal vier begrenzt.
-			\item Zeilen sollen je nach Anzahl der Favoriten ein- bzw. ausgeblendet werden. So sollen beispielsweise bei vier Favoriten genau eine Zeile und bei fünf Favoriten zwei Zeilen dargestellt werden.
+			\item \label{fa:6} Die Tastatur soll als Anzeige von als Favorit markierten Textschnipseln dienen. Diese werden in Form von Buttons dargestellt.
+			\item \label{fa:7} Die Anzeige der Textschnipsel soll mittels deren Namen bzw. Titel als Label auf Buttons erfolgen.
+			\item \label{fa:8} Änderungen des Favoritenstatus innerhalb der App sollen zur Laufzeit beim nächsten Sichtbarwerden der Tastatur widergespiegelt werden.
+			\item \label{fa:9} Beim Tippen auf einen Button auf der Tastatur soll der Inhalt des auf dem Button angezeigten Textschnipsels in das aktive Eingabefeld eingefügt werden.
+			\item \label{fa:10} Mit einem Swipe Left soll der zuletzt eingefügte Text wieder gelöscht werden.
+			\item \label{fa:11} Es sollen pro Zeile der Tastatur genau vier Buttons dargestellt werden. 
+			\item \label{fa:12} Die Anzahl der Zeilen ist auf maximal vier begrenzt.
+			\item \label{fa:13} Zeilen sollen je nach Anzahl der Favoriten ein- bzw. ausgeblendet werden. So sollen beispielsweise bei vier Favoriten genau eine Zeile und bei fünf Favoriten zwei Zeilen dargestellt werden.
 		\end{FA}
 
 	\subsection{Nichtfunktionale Anforderungen}
 		\begin{NFA}
-			\item Aussehen und Handhabung. Die App soll im Android-Standarddesign gehalten sein, damit sich neue Benutzer schnell zurechtfinden.
-			\item Benutzbarkeit. Die Oberfläche soll schlicht sein. Wenige Elemente, um die Bedienbarkeit und Erlernbarkeit zu gewährleiste.
-			\item Schnelligkeit. Der Nutzer soll in keinem Fall nach einer Aktion innerhalb der App mehr als 2 Sekunden auf eine Antwort waren müssen.
-			\item Korrektheit. Es sollen keine Anzeigefehler auf den getesteten Geräten auftauchen.
-			\item Weiterentwicklungsmöglichkeiten. Die Implementierung soll es ermöglichen einfach die Funktionalität der App zu erweitern.
+			\item \label{nfa:1} Aussehen und Handhabung. Die App soll im Android-Standarddesign gehalten sein, damit sich neue Benutzer schnell zurechtfinden.
+			\item \label{nfa:2} Benutzbarkeit. Die Oberfläche soll schlicht sein. Wenige Elemente, um die Bedienbarkeit und Erlernbarkeit zu gewährleiste.
+			\item \label{nfa:3} Schnelligkeit. Der Nutzer soll in keinem Fall nach einer Aktion innerhalb der App mehr als 2 Sekunden auf eine Antwort waren müssen.
+			\item \label{nfa:4} Korrektheit. Es sollen keine Anzeigefehler auf den getesteten Geräten auftauchen.
+			\item \label{nfa:5} Weiterentwicklungsmöglichkeiten. Die Implementierung soll es ermöglichen einfach die Funktionalität der App zu erweitern.
 		\end{NFA}
 	
 	
@@ -126,6 +130,7 @@
 	Eine Kommunikation zwischen beiden ist nicht vorgesehen.
 	Um dennoch die in der App als Favoriten markierten Textschnipsel auf der Tastatur anzeigen zu können wird die gleiche Datenquelle von beiden Einheiten benutzt.
 	Als gemeinsame Datenquelle wird die von der Android-Runtime angebotene SQLite-Datenbank benutzt.
+	Für jegliches Logging wird das Framework Logcat genutzt.
 		
 		\subsection{Persistence Layer - SQLite-Datenbank mit Room-Framework}
 			Für die persistente Speicherung der Textschnipsel wird die SQLite Datenbank genutzt. 
@@ -150,8 +155,6 @@
 				\label{fig:room_vm}
 			\end{figure}
 			
-			\noindent Es werden 3 Tabellen verwendet, welche das in Abbildung \ref{fig:er} dargestellte ER-Modell abbilden.\medskip
-			
 			\begin{figure}[H]
 				\begin{tikzpicture}[auto,node distance=1.5cm]
 					\node[entity] (node1) {Snippet}
@@ -172,11 +175,12 @@
 					% Draw an edge between rel1 and node1; rel1 and node2
 					\path (rel1) edge node {} (node1)
 					edge	 node {}	(node2);
-				\end{tikzpicture}
-				
-				\label{fig:er}
+				\end{tikzpicture}				
 				\caption{ER-Modell in der SQLite Datenbank}
+				\label{fig:er}
 			\end{figure}
+		
+			\noindent Es werden 3 Tabellen verwendet, welche das in Abbildung \ref{fig:er} dargestellte ER-Modell abbilden und \ref{fa:1} erfüllen.\medskip
 			
 		
 		\subsection{App}
@@ -200,36 +204,85 @@
 					\includegraphics[width=\textwidth]{Konzepte/screenshots/edit_snippet.jpg}
 					\caption{ViewSnippetActivity}
 				\end{subfigure}
-				\caption{Scrennshots der drei Activities der App}
+				\caption{Scrennshots der drei Activities innerhalb der App}
 				\label{fig:activities}
 			\end{figure}
 		
 			\subsubsection{MainAcitivity}
-				Kurz beschreiben blabla \\
-				\textcolor{red}{\textbf{{\LARGE \#TODO}}}
+			\label{sec:main}
+				Diese Activity bietet einen Überblick über die gespeicherten Textschnipsel mittels einer RecyclerList (\ref{fa:2}).\newline
 				
-			\subsubsection{NewSnippetActivity}
-				\textcolor{red}{\textbf{{\LARGE \#TODO}}}
+				\noindent Ein Listeneintrag soll vor allem den Fokus auf den Namen und den Favoritenstatus des Schnipsels werfen, weshalb diese auch farblich bzw. über Fettschrift hervorgehoben werden. \newline
+				Durch ein Tippen auf einen Listeneintrag wird \nameref{sec:view} aufgerufen und Details des angetippten Schnipsel angezeigt.\newline
+				Wird auf den FloatingActionButton getippt, so öffnet sich die \nameref{sec:new}, sodass ein neuer Textschnipsel hinzugefügt werden kann.\newline
+				
+				\noindent Ebenfalls in dieser Activity enthalten ist die Suche (\ref{fa:4}), auswählbar auf der AppBar. Diese wurde mittels der von der Laufzeitumgebung bereitgestellte SearchView umgesetzt. Somit ist eine Suche nach Name, Tags und Text möglich.
+				Die Suchergebnisse werden innerhalb der RecyclerView angezeigt.
+				
+			\subsubsection{New\-Snippet\-Activity}
+			\label{sec:new}
+				Hier ist es möglich neue Textschnipsel zu erstellen und zu speichern (\ref{fa:3}). \newline
+				
+				\noindent Der Textinhalt der Schnipsel kann dabei beliebig lang sein und UTF-8-Zeichen wie beispielsweise Emoji enthalten. 
+				Tags werden als CSV-Liste eingefügt, also durch ein Komma getrennt. 
+				Zusätzlich existiert die Option auf der AppBar den Schnipsel sofort als Favoriten zu markieren (\ref{fa:5}). 
 			
-			\subsubsection{ViewSnippetActivity}
-				\textcolor{red}{\textbf{{\LARGE \#TODO}}}
-		
+			\subsubsection{View\-Snippet\-Activity}
+			\label{sec:view}
+				Diese Activity dient zur detaillierten Anzeige, sowie dem Bearbeiten, Löschen und Ändern des Favoritenstatus eines Textschnipsels (\ref{fa:3}). 
+				Die zur Verfügung stehenden Aktionen werden auf der AppBar angezeigt.
+				Änderungen des Namens, der Tags oder des Textes werden nach Bestätigung mittels Tippen auf den Haken der AppBar in der Datenbank gespeichert.
+				
 		
 		\subsection{Tastatur}
-			\noindent Für die Tastatur soll eine eigene sogenannte InputMethod mittels der bereitgestellten \href{https://developer.android.com/guide/topics/text/creating-input-method.html}{API} implementiert werden. Statt den einzelnen Tasten sollen dann Inhalte aus der App angezeigt werden, die vom Nutzer selbst festgelegt werden können.\\
+			\noindent Für die Tastatur wird eine eigene sogenannte InputMethod mittels der bereitgestellten \href{https://developer.android.com/guide/topics/text/creating-input-method.html}{API} implementiert werden. Statt den einzelnen Tasten sollen die vom Benutzer festgelegt Favoriten als Button angezeigt werden (\ref{fa:6}).\\
 		
 			\noindent Die angepasste Tastatur ist als eine zusätzliche, normale Android Systemtastatur implementiert worden. Dabei gliedert sich der Aufbau wie folgt: 
 			\begin{itemize}
-				\item \texttt{xml/keyboard.xml} enthält die Aufteilung der Tastatur, wie diese in \texttt{Keyboard.Row} und \texttt{Keyboard.Key} unterteilt ist
-				\item \texttt{xml/method.xml} Festlegen der InputMethod als Systemtastatur
+				\item \texttt{xml/keyboard.xml} enthält die Definition der Buttons. Diese werden jeweils in Zeilen(\texttt{Keyboard.Row}) und Buttons(\texttt{Keyboard.Key}) unterteilt (\ref{fa:6}),ähnlich einer Tabelle in HTML).
+				\item \texttt{xml/method.xml} Festlegen der InputMethod als Typ "Tastatur"
 				\item \texttt{layout/keyboard\_view.xml} ist das Layout der Tastatur, welches aufgerufen wird
 				\item \texttt{layout/key\_preview.xml} dient der Key-Popup-Funktion, falls ein Key mehrere Symbole ausgeben kann. In unserem Fall wird diese nicht genutzt.
 				\item \texttt{SnippetInputService.java} ist die Javaklasse, in welcher die Keyboardfunktionen implementiert wurden, zum Beispiel das Instanzieren des Keyboards, Laden der Snippets aus der Datenbank und entsprechendes Einfügen auf die Knöpfe der Tastatur
+				\item Definition eines Service im \texttt{AndroidManifest}, siehe Listing \ref{lst:manifest} 
 			\end{itemize}
+			
+			\begin{lstlisting}[
+				language={XML}
+				,frame=single
+				,breaklines=true
+				,keywordstyle=\color{blue}
+				,caption={Eintrag in AndroidManifest.xml}
+				,label={lst:manifest}
+				,captionpos=b
+				,basicstyle=\footnotesize
+				,tabsize=4
+				,morekeywords={service,android:name,android:label,android:permission,intent-filter,action,meta-data,android:resource}
+				,alsoletter={-,:}
+				,backgroundcolor=\color{light-gray}
+				]
+<service
+	android:name=".keyboard.SnippetInputService"
+	android:label="SnippetKeyboard"
+	android:permission="android.permission.BIND_INPUT_METHOD">
+	<intent-filter>
+		<action android:name="android.view.InputMethod" />
+	</intent-filter>
+	<meta-data
+		android:name="android.view.im"
+		android:resource="@xml/method"
+	/>
+</service>
+			\end{lstlisting}
 		
-			\subsubsection{Extended InputMethodService}
-				Für die Tastatur wird der von Android definierte InputMethodService erweitert. \\
-				Beschreibung der Klasse SnippetInputService, wie diese Daten aus der DB zieht, die Label und OutputText der Buttons setzt, wie das Layout der Tastatur über die verschiedenen XML-Ressourcen definiert wird.
+			\subsubsection{Snippet\-Input\-Service}
+				Für die Tastatur wird der von Android definierte \href{https://developer.android.com/guide/topics/text/creating-input-method}{InputMethodService} erweitert.
+				Um jegliche Änderungen in der Datenbank sofort widerzuspiegeln werden jedes Mal vor Sichtbarmachen der Tastatur (bei Aufruf von \texttt{onStartInputMethod()} innerhalb des IM-Lifecycles) alle Favoriten aus der Datenbank geladen (\ref{fa:8}). Folgend werden die Anzahl der benötigten Zeilen (max. 4, \ref{fa:12}, \ref{fa:13}) bei genau vier Buttons (\ref{fa:11}) berechnet und sequentiell die \texttt{Keyboard.Key}-Elemente mit Inhalt befüllt (\ref{fa:7}). Dafür werden die \texttt{keyLabel} mit dem Namen und die \texttt{keyOutputText} mit dem Text der Schnipsel versehen.\newline
+				
+				\noindent Zur vollständigen Funktion der Tastatur muss ebenfalls ein \texttt{KeyboardView.OnKeyboardActionListener} implementiert werden. Zum Einfügen des \texttt{keyOutputText} in das aktuelle Eingabefeld muss die \texttt{onText(CharSequence charSequence)}-Funktion implementiert werden, welche beim Tippen auf einen Button mit dem Inhalt \texttt{keyOutputText} aufgerufen wird (\ref{fa:9}).\newline
+				
+				\noindent Zusätzlich wurde auf der Tastatur die Geste "nach links wischen" (\texttt{onSwipeLeft()} so implementiert, dass der zuletzt eingegebene Text wieder gelöscht wird (\ref{fa:10}).
+				
 		
 	
 \section{Probleme und deren Lösung}
@@ -268,18 +321,15 @@
 			Lösung über mehrere XML-Definition, die jeweils die gewünschte Anzahl der Reihen enthalten. Berechnung bei \lstinline|onStartInputView()|, also bei jedem Sichtbarwerden der Tastatur.\textcolor{red}{\textbf{{\LARGE \#TODO}}}
 	
 \section{Ausblick}
-	Was gibt es, was später noch eingebaut werden könnte?
+	Durch den eingeschränkten Rahmen des Projekts sind viele Punkte offen geblieben blabla \textcolor{red}{\textbf{{\LARGE \#TODO}}}
 	\begin{itemize}
 		\item receive text from other apps via sharing
 		\item Häufigkeitsanalyse: wird viel benutzt -> wird als erstes angezeigt
-		\item Mehr Einstellungsmöglichkeiten für 
+		\item Einstellungsmöglichkeiten für den Benutzer: Layout der Tastatur
 	\end{itemize}
 	
 	
 \section{Wer hat was gemacht?}
-	Janine alles, Tanja nix.
-	Da ichs nie auf die Reihe kriegen werde das persönlich zu sagen, weil ich viel zu awkward für so etwas bin.. es tut mir so Leid, dass ich mich von dir so hab durchs Semester ziehen lassen. Jedes Mal, wenn ich versucht habe etwas anzufangen, ging es einfach nicht, weil mein Kopf sonstwo steckt. Ich bekomme derzeit nichts auf die Reihe außer Kleinigkeiten und selbst bei denen versage ich regelmäßig.
-	Danke, dass du es erträgst. Danke, dass du mir hilfst. Danke, dass du mich so durchziehst. \bigskip\\
 	Janine: App\\
 	Tanja: Tastatur\\
 	Denke, das passt dann so :)
